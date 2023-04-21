@@ -22,7 +22,11 @@ const TopTabs = () => {
     <TopTab.Navigator
       screenOptions={{
         tabBarContentContainerStyle: { marginTop: insets.top },
-        tabBarLabelStyle: { fontSize: 14, textTransform: "none" },
+        tabBarLabelStyle: {
+          fontSize: 14,
+          textTransform: "none",
+          fontFamily: "SFProRoundedBold",
+        },
         tabBarIndicatorStyle: {
           backgroundColor: "#000",
         },

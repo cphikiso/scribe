@@ -46,6 +46,7 @@ const HomeScreen = () => {
             onChange={handleSheetChanges}
           >
             <View style={styles.modalContentContainer}>
+              <Text style={styles.cancelText}>Cancel</Text>
               <Text style={styles.modalHeader}>New Post</Text>
             </View>
           </BottomSheet>

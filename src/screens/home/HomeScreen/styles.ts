@@ -29,10 +29,11 @@ export const styles = StyleSheet.create({
 
   modalContentContainer: {
     flex: 1,
-    alignItems: "center",
-    paddingTop: 8,
+    // alignItems: "center",
+    //paddingTop: 8,
     borderRadius: 44,
     //backgroundColor: "red",
+    paddingHorizontal: 16,
   },
   bottomSheet: {
     flex: 1,
@@ -49,7 +50,15 @@ export const styles = StyleSheet.create({
 
     elevation: 24,
   },
+  cancelText: {
+    fontSize: 14,
+    fontFamily: "SFProRoundedMedium",
+    color: "#000",
+  },
   modalHeader: {
     fontSize: 20,
+    fontFamily: "SFProRoundedHeavy",
+    color: "#000",
+    textAlign: "center",
   },
 });
