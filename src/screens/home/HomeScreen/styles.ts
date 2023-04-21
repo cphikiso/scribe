@@ -35,6 +35,7 @@ export const styles = StyleSheet.create({
     //backgroundColor: "red",
     paddingHorizontal: 16,
   },
+  touchableWF: { flex: 1, width: "100%" },
   bottomSheet: {
     flex: 1,
     borderRadius: 44,
@@ -76,4 +77,19 @@ export const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 18,
   },
+  playbackIconContainer: { alignSelf: "center", marginBottom: 28 },
+  modalButton: {
+    width: "100%",
+    backgroundColor: "#000",
+    height: 58,
+    borderRadius: 44,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 20,
+    fontFamily: "SFProRoundedHeavy",
+  },
+  waveForm: { paddingHorizontal: 16, height: 160 },
 });

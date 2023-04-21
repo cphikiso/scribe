@@ -7,6 +7,7 @@ import {
   View,
   Modal,
   TouchableWithoutFeedback,
+  Image,
 } from "react-native";
 import { styles } from "./styles";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -69,7 +70,7 @@ const HomeScreen = () => {
       <Modal transparent={true} animationType="fade" visible={modalVisible}>
         <View style={styles.modal}>
           <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-            <View style={{ flex: 1, width: "100%" }}></View>
+            <View style={styles.touchableWF}></View>
           </TouchableWithoutFeedback>
           <BottomSheet
             detached={true}
@@ -95,7 +96,7 @@ const HomeScreen = () => {
               <Text style={styles.modalHeader}>New Post</Text>
 
               <Text style={styles.timerText}>00:04.59</Text>
-              <View style={{ paddingHorizontal: 16, height: 160 }}>
+              <View style={styles.waveForm}>
                 {recordingProcess || listening ? (
                   <Lottie
                     source={require("../../../../assets/soundwaves.json")}
@@ -123,7 +124,7 @@ const HomeScreen = () => {
                   {!listening ? (
                     <TouchableOpacity
                       onPress={() => setListening(true)}
-                      style={{ alignSelf: "center", marginBottom: 28 }}
+                      style={styles.playbackIconContainer}
                     >
                       <Ionicons
                         name="ios-play-circle-outline"
@@ -134,7 +135,7 @@ const HomeScreen = () => {
                   ) : (
                     <TouchableOpacity
                       onPress={() => setListening(false)}
-                      style={{ alignSelf: "center", marginBottom: 28 }}
+                      style={styles.playbackIconContainer}
                     >
                       <Ionicons
                         name="ios-pause-circle-outline"
@@ -143,25 +144,9 @@ const HomeScreen = () => {
                       />
                     </TouchableOpacity>
                   )}
-                  <TouchableOpacity
-                    style={{
-                      width: "100%",
-                      backgroundColor: "#000",
-                      height: 58,
-                      borderRadius: 44,
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: "#fff",
-                        fontSize: 20,
-                        fontFamily: "SFProRoundedHeavy",
-                      }}
-                    >
-                      Start scribing{" "}
-                    </Text>
+                  <TouchableOpacity style={styles.modalButton}>
+                    <Text style={styles.buttonText}>Transcribe</Text>
+                    {/* Start scribing */}
                   </TouchableOpacity>
                 </>
               )}
@@ -178,8 +163,80 @@ const HomeScreen = () => {
       >
         <AntDesign name="pluscircle" size={44} color="black" />
       </TouchableOpacity>
-
-      <Text>Open up App.js to start working on your app!</Text>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <View style={{ flexDirection: "row", maxWidth: "80%" }}>
+          <Image
+            source={require("../../../../assets/pic.jpg")}
+            style={{ height: 44, width: 44, borderRadius: 44, marginRight: 12 }}
+          />
+          <View>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text
+                style={{
+                  color: "#000",
+                  marginRight: 4,
+                  fontFamily: "SFProRoundedBold",
+                  marginBottom: 4,
+                  fontSize: 16,
+                }}
+              >
+                Travis Scott
+              </Text>
+              <Text
+                style={{
+                  color: "rgba(60,60,67, 0.6)",
+                  fontFamily: "SFProRoundedMedium",
+                  fontSize: 16,
+                  marginRight: 4,
+                }}
+              >
+                @laflame
+              </Text>
+              <View
+                style={{
+                  height: 2,
+                  width: 2,
+                  borderRadius: 2,
+                  backgroundColor: "rgba(60,60,67,0.6)",
+                  marginRight: 4,
+                }}
+              />
+              <Text
+                style={{
+                  color: "rgba(60,60,67, 0.6)",
+                  fontFamily: "SFProRoundedMedium",
+                  fontSize: 16,
+                }}
+              >
+                2m
+              </Text>
+            </View>
+            <Text
+              style={{
+                color: "rgb(60,60,67)",
+                fontFamily: "SFProRoundedMedium",
+                fontSize: 16,
+              }}
+            >
+              these aren’t just random questions. they reveal (and motivate)
+              some key design decisions. for each of these, what do you *want*
+              the answer to be, and why? what is the “price” of your chosen
+              answer?
+            </Text>
+          </View>
+        </View>
+        <TouchableOpacity
+          style={{
+            top: -16,
+            height: 44,
+            width: 44,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Ionicons name="ios-play" size={24} color={"rgba(60,60,67,0.6)"} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
