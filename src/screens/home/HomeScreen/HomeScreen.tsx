@@ -8,6 +8,7 @@ import {
   Modal,
   TouchableWithoutFeedback,
   Image,
+  FlatList,
 } from "react-native";
 import { styles } from "./styles";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -15,6 +16,7 @@ import { AntDesign, Ionicons } from "@expo/vector-icons";
 import BottomSheet from "@gorhom/bottom-sheet";
 import Lottie from "lottie-react-native";
 import { Audio } from "expo-av";
+import PostItem from "../../../../components/PostItem";
 
 const HomeScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -163,82 +165,15 @@ const HomeScreen = () => {
       >
         <AntDesign name="pluscircle" size={44} color="black" />
       </TouchableOpacity>
-      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <View style={{ flexDirection: "row", maxWidth: "80%" }}>
-          <Image
-            source={require("../../../../assets/pic.jpg")}
-            style={{ height: 44, width: 44, borderRadius: 44, marginRight: 12 }}
-          />
-          <View>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Text
-                style={{
-                  color: "#000",
-                  marginRight: 4,
-                  fontFamily: "SFProRoundedBold",
-                  marginBottom: 4,
-                  fontSize: 16,
-                }}
-              >
-                Travis Scott
-              </Text>
-              <Text
-                style={{
-                  color: "rgba(60,60,67, 0.6)",
-                  fontFamily: "SFProRoundedMedium",
-                  fontSize: 16,
-                  marginRight: 4,
-                }}
-              >
-                @laflame
-              </Text>
-              <View
-                style={{
-                  height: 2,
-                  width: 2,
-                  borderRadius: 2,
-                  backgroundColor: "rgba(60,60,67,0.6)",
-                  marginRight: 4,
-                }}
-              />
-              <Text
-                style={{
-                  color: "rgba(60,60,67, 0.6)",
-                  fontFamily: "SFProRoundedMedium",
-                  fontSize: 16,
-                }}
-              >
-                2m
-              </Text>
-            </View>
-            <Text
-              style={{
-                color: "rgb(60,60,67)",
-                fontFamily: "SFProRoundedMedium",
-                fontSize: 16,
-              }}
-            >
-              these aren’t just random questions. they reveal (and motivate)
-              some key design decisions. for each of these, what do you *want*
-              the answer to be, and why? what is the “price” of your chosen
-              answer?
-            </Text>
-          </View>
-        </View>
-        <TouchableOpacity
-          style={{
-            top: -16,
-            height: 44,
-            width: 44,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Ionicons name="ios-play" size={24} color={"rgba(60,60,67,0.6)"} />
-        </TouchableOpacity>
-      </View>
+      <FlatList
+        data={posts}
+        showsVerticalScrollIndicator={false}
+        renderItem={(post) => <PostItem post={post} />}
+      />
     </View>
   );
 };
 
 export default HomeScreen;
+
+const posts = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];

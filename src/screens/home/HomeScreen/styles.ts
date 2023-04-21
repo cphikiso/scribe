@@ -8,7 +8,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFF",
     paddingHorizontal: 16,
-    paddingTop: 16,
   },
   plusCircle: {
     position: "absolute",
@@ -19,6 +18,8 @@ export const styles = StyleSheet.create({
     borderRadius: 48,
     alignItems: "center",
     justifyContent: "center",
+    zIndex: 100,
+    backgroundColor: "#FFF",
   },
   modal: {
     flex: 1,
