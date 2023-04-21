@@ -13,9 +13,45 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import BottomSheet from "@gorhom/bottom-sheet";
 import Lottie from "lottie-react-native";
+import { Audio } from "expo-av";
 
 const HomeScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [recording, setRecording] = useState();
+  const [recordingProcess, setRecordingProcess] = useState(false);
+  const [listening, setListening] = useState(false);
+
+  async function startRecording() {
+    try {
+      console.log("Requesting permissions..");
+      await Audio.requestPermissionsAsync();
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      });
+
+      console.log("Starting recording..");
+      const { recording } = await Audio.Recording.createAsync(
+        Audio.RecordingOptionsPresets.HIGH_QUALITY
+      );
+      setRecording(recording);
+      console.log("Recording started");
+    } catch (err) {
+      console.error("Failed to start recording", err);
+    }
+  }
+
+  async function stopRecording() {
+    console.log("Stopping recording..");
+    setRecording(undefined);
+    await recording.stopAndUnloadAsync();
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+    });
+    const uri = recording.getURI();
+    console.log("Recording stopped and stored at", uri);
+  }
+
   // ref
   const bottomSheetRef = useRef<BottomSheet>(null);
 
@@ -51,7 +87,6 @@ const HomeScreen = () => {
                 style={styles.cancel}
                 hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
                 onPress={() => {
-                  console.log("press");
                   setModalVisible(false);
                 }}
               >
@@ -60,20 +95,76 @@ const HomeScreen = () => {
               <Text style={styles.modalHeader}>New Post</Text>
 
               <Text style={styles.timerText}>00:04.59</Text>
-              <View style={{ paddingHorizontal: 16, height: 200 }}>
-                <Lottie
-                  source={require("../../../../assets/soundwaves.json")}
-                  autoPlay
-                  loop
-                />
+              <View style={{ paddingHorizontal: 16, height: 160 }}>
+                {recordingProcess || listening ? (
+                  <Lottie
+                    source={require("../../../../assets/soundwaves.json")}
+                    autoPlay
+                    loop
+                  />
+                ) : null}
               </View>
-              <TouchableOpacity style={{ alignSelf: "center" }}>
-                <Ionicons
-                  name="ios-stop-circle-outline"
-                  size={68}
-                  color="black"
-                />
-              </TouchableOpacity>
+              {recordingProcess ? (
+                <TouchableOpacity
+                  onPress={() => {
+                    setListening(false);
+                    setRecordingProcess(false);
+                  }}
+                  style={{ alignSelf: "center" }}
+                >
+                  <Ionicons
+                    name="ios-stop-circle-outline"
+                    size={68}
+                    color="black"
+                  />
+                </TouchableOpacity>
+              ) : (
+                <>
+                  {!listening ? (
+                    <TouchableOpacity
+                      onPress={() => setListening(true)}
+                      style={{ alignSelf: "center", marginBottom: 28 }}
+                    >
+                      <Ionicons
+                        name="ios-play-circle-outline"
+                        size={68}
+                        color="black"
+                      />
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      onPress={() => setListening(false)}
+                      style={{ alignSelf: "center", marginBottom: 28 }}
+                    >
+                      <Ionicons
+                        name="ios-pause-circle-outline"
+                        size={68}
+                        color="black"
+                      />
+                    </TouchableOpacity>
+                  )}
+                  <TouchableOpacity
+                    style={{
+                      width: "100%",
+                      backgroundColor: "#000",
+                      height: 58,
+                      borderRadius: 44,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "#fff",
+                        fontSize: 20,
+                        fontFamily: "SFProRoundedHeavy",
+                      }}
+                    >
+                      Start scribing{" "}
+                    </Text>
+                  </TouchableOpacity>
+                </>
+              )}
             </View>
           </BottomSheet>
         </View>
@@ -82,7 +173,7 @@ const HomeScreen = () => {
         style={styles.plusCircle}
         onPress={() => {
           setModalVisible(true);
-          console.log("press");
+          setRecordingProcess(true);
         }}
       >
         <AntDesign name="pluscircle" size={44} color="black" />
