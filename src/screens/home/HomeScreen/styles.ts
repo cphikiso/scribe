@@ -26,10 +26,28 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+
   modalContentContainer: {
     flex: 1,
     alignItems: "center",
     paddingTop: 8,
+    borderRadius: 44,
+    //backgroundColor: "red",
+  },
+  bottomSheet: {
+    flex: 1,
+    borderRadius: 44,
+    backgroundColor: "#FFF",
+    marginHorizontal: 16,
+    shadowColor: "rgba(60,60,67,0.6)",
+    shadowOffset: {
+      width: 0,
+      height: 12,
+    },
+    shadowOpacity: 0.58,
+    shadowRadius: 16.0,
+
+    elevation: 24,
   },
   modalHeader: {
     fontSize: 20,

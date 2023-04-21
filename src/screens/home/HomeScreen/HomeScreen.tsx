@@ -32,11 +32,12 @@ const HomeScreen = () => {
       <Modal transparent={true} animationType="fade" visible={modalVisible}>
         <View style={styles.modal}>
           <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-            <View style={{ flex: 1, width: "100%" }}>
-              {/* <Text>yooooo</Text> */}
-            </View>
+            <View style={{ flex: 1, width: "100%" }}></View>
           </TouchableWithoutFeedback>
           <BottomSheet
+            detached={true}
+            bottomInset={46}
+            style={styles.bottomSheet}
             onClose={() => setModalVisible(false)}
             enablePanDownToClose={true}
             ref={bottomSheetRef}
