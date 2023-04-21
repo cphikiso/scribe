@@ -50,15 +50,30 @@ export const styles = StyleSheet.create({
 
     elevation: 24,
   },
+  cancel: {
+    height: 18,
+    position: "absolute",
+    left: 18,
+    width: 62,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   cancelText: {
-    fontSize: 14,
+    fontSize: 16,
     fontFamily: "SFProRoundedMedium",
     color: "#000",
+  },
+  timerText: {
+    fontSize: 14,
+    fontFamily: "SFProRoundedMedium",
+    color: "rgba(60,60,67,0.6)",
+    textAlign: "center",
   },
   modalHeader: {
     fontSize: 20,
     fontFamily: "SFProRoundedHeavy",
     color: "#000",
     textAlign: "center",
+    marginBottom: 18,
   },
 });

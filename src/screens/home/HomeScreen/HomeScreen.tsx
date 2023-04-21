@@ -10,8 +10,9 @@ import {
 } from "react-native";
 import { styles } from "./styles";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 import BottomSheet from "@gorhom/bottom-sheet";
+import Lottie from "lottie-react-native";
 
 const HomeScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -46,8 +47,33 @@ const HomeScreen = () => {
             onChange={handleSheetChanges}
           >
             <View style={styles.modalContentContainer}>
-              <Text style={styles.cancelText}>Cancel</Text>
+              <TouchableOpacity
+                style={styles.cancel}
+                hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+                onPress={() => {
+                  console.log("press");
+                  setModalVisible(false);
+                }}
+              >
+                <Text style={styles.cancelText}>Cancel</Text>
+              </TouchableOpacity>
               <Text style={styles.modalHeader}>New Post</Text>
+
+              <Text style={styles.timerText}>00:04.59</Text>
+              <View style={{ paddingHorizontal: 16, height: 200 }}>
+                <Lottie
+                  source={require("../../../../assets/soundwaves.json")}
+                  autoPlay
+                  loop
+                />
+              </View>
+              <TouchableOpacity style={{ alignSelf: "center" }}>
+                <Ionicons
+                  name="ios-stop-circle-outline"
+                  size={68}
+                  color="black"
+                />
+              </TouchableOpacity>
             </View>
           </BottomSheet>
         </View>
