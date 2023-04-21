@@ -20,4 +20,18 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  modal: {
+    flex: 1,
+    backgroundColor: "rgba(60,60,67,0.3)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContentContainer: {
+    flex: 1,
+    alignItems: "center",
+    paddingTop: 8,
+  },
+  modalHeader: {
+    fontSize: 20,
+  },
 });
