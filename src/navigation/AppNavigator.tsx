@@ -122,11 +122,7 @@ const TabNavigator = () => {
 };
 
 const AppNavigator = () => {
-  return (
-    <NavigationContainer>
-      <TabNavigator />
-    </NavigationContainer>
-  );
+  return <TabNavigator />;
 };
 
 export default AppNavigator;
