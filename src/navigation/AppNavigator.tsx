@@ -8,9 +8,11 @@ import EveryoneScreen from "../screens/home/EveryoneScreen/EveryoneScreen";
 import TopTabBar from "./TopTabBar";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Octicons, Ionicons } from "@expo/vector-icons";
-import { Image } from "react-native";
+import { Image, View } from "react-native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import NotificationsScreen from "../screens/notifications/NotificationsScreen/NotificationsScreen";
 
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 
 const TopTab = createMaterialTopTabNavigator();
 
@@ -38,15 +40,25 @@ const TopTabs = () => {
 
 const TabNavigator = () => {
   return (
-    <Tab.Navigator barStyle={{ backgroundColor: "#FFF" }}>
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: "#000",
+        title: () => null,
+        tabBarInactiveTintColor: "rgba(60,60,67,0.3)",
+      }}
+    >
       <Tab.Screen
         name="Home"
         component={TopTabs}
         options={{
           tabBarIcon: ({ color }) => (
-            <Octicons name="home" size={24} color={color} />
+            <Octicons
+              name="home"
+              size={color === "#000" ? 28 : 24}
+              color={color}
+            />
           ),
-          title: null,
         }}
       />
       <Tab.Screen
@@ -54,22 +66,55 @@ const TabNavigator = () => {
         component={SearchScreen}
         options={{
           tabBarIcon: ({ color }) => (
-            <Ionicons name="ios-search" size={24} color={color} />
+            <Ionicons
+              name="ios-search"
+              size={color === "#000" ? 28 : 24}
+              color={color}
+            />
           ),
-          title: null,
+        }}
+      />
+      <Tab.Screen
+        name="Notifications"
+        component={NotificationsScreen}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <Ionicons
+              name="notifications"
+              size={color === "#000" ? 28 : 24}
+              color={color}
+            />
+          ),
         }}
       />
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
         options={{
-          tabBarIcon: ({ color }) => (
-            <Image
-              source={require("../../assets/pic.jpg")}
-              style={{ height: 28, width: 28, borderRadius: 12 }}
-            />
-          ),
-          title: null,
+          tabBarIcon: ({ color }) =>
+            color === "#000" ? (
+              <View
+                style={{
+                  borderWidth: 2,
+                  height: 30,
+                  width: 30,
+                  borderRadius: 30,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderColor: color,
+                }}
+              >
+                <Image
+                  source={require("../../assets/pic.jpg")}
+                  style={{ height: 24, width: 24, borderRadius: 24 }}
+                />
+              </View>
+            ) : (
+              <Image
+                source={require("../../assets/pic.jpg")}
+                style={{ height: 28, width: 28, borderRadius: 24 }}
+              />
+            ),
         }}
       />
     </Tab.Navigator>
