@@ -8,7 +8,7 @@ import EveryoneScreen from "../screens/home/EveryoneScreen/EveryoneScreen";
 import TopTabBar from "./TopTabBar";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Octicons, Ionicons } from "@expo/vector-icons";
-import { Image, View } from "react-native";
+import { Image, TouchableOpacity, View, Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import NotificationsScreen from "../screens/notifications/NotificationsScreen/NotificationsScreen";
 
@@ -95,6 +95,25 @@ const TabNavigator = () => {
         name="Profile"
         component={ProfileScreen}
         options={{
+          headerShown: true,
+
+          headerTitle: () => (
+            <Text style={{ fontSize: 18, fontFamily: "SFProRoundedBold" }}>
+              @phikiso
+            </Text>
+          ),
+          headerLeft: () => null,
+          headerRight: () => (
+            <TouchableOpacity
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginRight: 16,
+              }}
+            >
+              <Ionicons name="ios-ellipsis-horizontal" size={28} color="#000" />
+            </TouchableOpacity>
+          ),
           tabBarIcon: ({ color }) =>
             color === "#000" ? (
               <View
