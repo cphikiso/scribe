@@ -59,7 +59,7 @@ const TabNavigator = () => {
           tabBarIcon: ({ color }) => (
             <Octicons
               name="home"
-              size={color === "#000" ? 28 : 24}
+              size={color === "#000" ? 26 : 24}
               color={color}
             />
           ),
