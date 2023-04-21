@@ -39,7 +39,7 @@ const ProfileScreen = () => {
                 <Text
                   style={{
                     fontFamily: "SFProRoundedMedium",
-                    fontSize: 18,
+                    fontSize: 16,
                   }}
                 >
                   a lil bio about me ...
@@ -96,6 +96,7 @@ const ProfileScreen = () => {
         )}
         data={posts}
         renderItem={(post) => <PostItem post={post} />}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );

@@ -82,6 +82,12 @@ const TabNavigator = () => {
         name="Notifications"
         component={NotificationsScreen}
         options={{
+          headerShown: true,
+          headerTitle: () => (
+            <Text style={{ fontSize: 18, fontFamily: "SFProRoundedBold" }}>
+              Notifications
+            </Text>
+          ),
           tabBarIcon: ({ color }) => (
             <Ionicons
               name="notifications"
