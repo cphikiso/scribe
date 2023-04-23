@@ -1,86 +1,29 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { styles } from "./stylesNotificationItem";
 
 const NotificationItem = ({ notification }) => {
   return (
-    <View
-      style={{
-        marginVertical: 8,
-      }}
-    >
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
-        <View style={{ flexDirection: "row", maxWidth: "80%" }}>
+    <View style={styles.container}>
+      <View style={styles.outerFlexRow}>
+        <View style={styles.innerFlexRow}>
           <Image
             source={require("../assets/pic.jpg")}
-            style={{
-              height: 44,
-              width: 44,
-              borderRadius: 44,
-              marginRight: 12,
-            }}
+            style={styles.profilePic}
           />
           <View>
-            <View style={{ flexDirection: "row" }}>
-              <Text
-                style={{
-                  color: "#000",
-                  marginRight: 4,
-                  fontFamily: "SFProRoundedBold",
-                  fontSize: 16,
-                }}
-              >
-                Travis Scott
-              </Text>
-              <Text
-                style={{
-                  color: "rgba(60,60,67, 0.6)",
-                  fontFamily: "SFProRoundedMedium",
-                  fontSize: 16,
-                  marginRight: 4,
-                }}
-              >
-                @laflame
-              </Text>
-              <View
-                style={{
-                  height: 2,
-                  width: 2,
-                  borderRadius: 2,
-                  backgroundColor: "rgba(60,60,67,0.6)",
-                  marginRight: 4,
-
-                  alignSelf: "center",
-                }}
-              />
-              <Text
-                style={{
-                  color: "rgba(60,60,67, 0.6)",
-                  fontFamily: "SFProRoundedMedium",
-                  fontSize: 16,
-                }}
-              >
-                2m
-              </Text>
+            <View style={styles.titleRow}>
+              <Text style={styles.name}>Travis Scott</Text>
+              <Text style={styles.username}>@laflame</Text>
+              <View style={styles.dot} />
+              <Text style={styles.timeText}>2m</Text>
             </View>
-            <Text
-              style={{
-                color: "rgb(60,60,67)",
-                fontFamily: "SFProRoundedMedium",
-                fontSize: 16,
-              }}
-            >
-              {notification.action}
-            </Text>
+            <Text style={styles.bodyText}>{notification.action}</Text>
           </View>
         </View>
       </View>
-      <View style={{ height: 1, width: "100%", backgroundColor: "#F5F5F5" }} />
+      <View style={styles.bottomLine} />
     </View>
   );
 };
