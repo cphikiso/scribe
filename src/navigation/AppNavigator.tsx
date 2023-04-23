@@ -11,6 +11,7 @@ import { Octicons, Ionicons } from "@expo/vector-icons";
 import { Image, TouchableOpacity, View, Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import NotificationsScreen from "../screens/notifications/NotificationsScreen/NotificationsScreen";
+import HomeCreatePostButton from "../../components/HomeCreatePost/HomeCreatePostButton";
 
 const Tab = createBottomTabNavigator();
 
@@ -19,26 +20,29 @@ const TopTab = createMaterialTopTabNavigator();
 const TopTabs = () => {
   const insets = useSafeAreaInsets();
   return (
-    <TopTab.Navigator
-      screenOptions={{
-        tabBarContentContainerStyle: { marginTop: insets.top },
-        tabBarLabelStyle: {
-          fontSize: 14,
-          textTransform: "none",
-          fontFamily: "SFProRoundedBold",
-        },
-        tabBarIndicatorStyle: {
-          backgroundColor: "#000",
-        },
-      }}
-    >
-      <TopTab.Screen
-        name="Foryou"
-        options={{ title: "For you" }}
-        component={HomeScreen}
-      />
-      <TopTab.Screen name="Everyone" component={EveryoneScreen} />
-    </TopTab.Navigator>
+    <>
+      <TopTab.Navigator
+        screenOptions={{
+          tabBarContentContainerStyle: { marginTop: insets.top },
+          tabBarLabelStyle: {
+            fontSize: 14,
+            textTransform: "none",
+            fontFamily: "SFProRoundedBold",
+          },
+          tabBarIndicatorStyle: {
+            backgroundColor: "#000",
+          },
+        }}
+      >
+        <TopTab.Screen
+          name="Foryou"
+          options={{ title: "For you" }}
+          component={HomeScreen}
+        />
+        <TopTab.Screen name="Everyone" component={EveryoneScreen} />
+      </TopTab.Navigator>
+      <HomeCreatePostButton />
+    </>
   );
 };
 
