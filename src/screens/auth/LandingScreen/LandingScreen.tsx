@@ -1,0 +1,48 @@
+import { View, Text, TouchableOpacity, Image } from "react-native";
+import React from "react";
+import { styles } from "./styles";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { colors } from "../../../../components/colors";
+
+const LandingScreen = () => {
+  const insets = useSafeAreaInsets();
+
+  return (
+    <View style={[styles.container, { paddingTop: insets.top }]}>
+      <Image
+        source={require("../../../../assets/wandLogoPurple.png")}
+        style={styles.logo}
+      />
+
+      <View>
+        <Text style={styles.tagline}>
+          Share your thoughts {"\n"}with the world.
+        </Text>
+      </View>
+
+      <View>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Sign up</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.button,
+            { backgroundColor: "rgba(116, 116, 128, 0.08)", marginTop: 14 },
+          ]}
+        >
+          <Text style={[styles.buttonText, { color: colors.purple }]}>
+            Log in
+          </Text>
+        </TouchableOpacity>
+
+        <Text style={[styles.footerText, { margin: insets.bottom + 16 }]}>
+          By continuing you agree to Scribe's{" "}
+          <Text style={{ color: colors.purple60 }}>Terms of Service</Text> and{" "}
+          <Text style={{ color: colors.purple60 }}>Privacy Policy</Text>
+        </Text>
+      </View>
+    </View>
+  );
+};
+
+export default LandingScreen;

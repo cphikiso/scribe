@@ -17,6 +17,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import CreatePostScreen from "../screens/home/PostCreation/CreatePostScreen/CreatePostScreen";
 import { useNavigation } from "@react-navigation/core";
 import TranscriptionDoneScreen from "../screens/home/PostCreation/TransciptionDoneScreen/TranscriptionDoneScreen";
+import LandingScreen from "../screens/auth/LandingScreen/LandingScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -204,6 +205,11 @@ const AppNavigator = () => {
         headerShown: false,
       }}
     >
+      {/* AUTH  */}
+      <Stack.Group>
+        <Stack.Screen name="Landing" component={LandingScreen} />
+      </Stack.Group>
+
       <Stack.Screen name="TabStack" component={TabNavigator} />
       <Stack.Group screenOptions={{ presentation: "transparentModal" }}>
         <Stack.Screen name="CreatePost" component={CreatePostScreen} />
