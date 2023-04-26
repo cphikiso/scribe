@@ -163,7 +163,7 @@ const HomeScreen = () => {
           setRecordingProcess(true);
         }}
       >
-        <AntDesign name="pluscircle" size={44} color="black" />
+        {/* <AntDesign name="pluscircle" size={44} color="black" /> */}
       </TouchableOpacity>
       <FlatList
         data={posts}

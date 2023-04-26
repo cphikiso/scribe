@@ -12,6 +12,8 @@ import { Image, TouchableOpacity, View, Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import NotificationsScreen from "../screens/notifications/NotificationsScreen/NotificationsScreen";
 import HomeCreatePostButton from "../../components/HomeCreatePost/HomeCreatePostButton";
+import { colors } from "../../components/colors";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const Tab = createBottomTabNavigator();
 
@@ -41,7 +43,24 @@ const TopTabs = () => {
         />
         <TopTab.Screen name="Everyone" component={EveryoneScreen} />
       </TopTab.Navigator>
-      <HomeCreatePostButton />
+      <TouchableOpacity
+        style={{
+          height: 54,
+          width: 54,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: colors.purple,
+          borderRadius: 44,
+          position: "absolute",
+          bottom: 20,
+          right: 20,
+        }}
+      >
+        <Image
+          source={require("../../assets/appIcons/plus.png")}
+          style={{ height: 28, width: 28 }}
+        />
+      </TouchableOpacity>
     </>
   );
 };
@@ -154,8 +173,18 @@ const TabNavigator = () => {
   );
 };
 
+const Stack = createNativeStackNavigator();
+
 const AppNavigator = () => {
-  return <TabNavigator />;
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="Home" component={TabNavigator} />
+    </Stack.Navigator>
+  );
 };
 
 export default AppNavigator;
