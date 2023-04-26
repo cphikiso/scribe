@@ -16,6 +16,7 @@ import { colors } from "../../components/colors";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import CreatePostScreen from "../screens/home/PostCreation/CreatePostScreen/CreatePostScreen";
 import { useNavigation } from "@react-navigation/core";
+import TranscriptionDoneScreen from "../screens/home/PostCreation/TransciptionDoneScreen/TranscriptionDoneScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -182,6 +183,8 @@ const TabNavigator = () => {
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
+  const navigation = useNavigation();
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -191,6 +194,33 @@ const AppNavigator = () => {
       <Stack.Screen name="TabStack" component={TabNavigator} />
       <Stack.Group screenOptions={{ presentation: "transparentModal" }}>
         <Stack.Screen name="CreatePost" component={CreatePostScreen} />
+        <Stack.Screen
+          options={{
+            headerShown: true,
+            headerStyle: { backgroundColor: colors.purple },
+            headerShadowVisible: false,
+            headerTitle: " ",
+            headerRight: () => (
+              <TouchableOpacity
+                style={{
+                  height: 36,
+                  width: 36,
+                  borderRadius: 36,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                onPress={() => navigation.goBack()}
+              >
+                <Image
+                  source={require("../../assets/appIcons/close.png")}
+                  style={{ height: 36, width: 36 }}
+                />
+              </TouchableOpacity>
+            ),
+          }}
+          name="Transcribe"
+          component={TranscriptionDoneScreen}
+        />
       </Stack.Group>
     </Stack.Navigator>
   );
