@@ -20,6 +20,8 @@ import TranscriptionDoneScreen from "../screens/home/PostCreation/TransciptionDo
 import LandingScreen from "../screens/auth/LandingScreen/LandingScreen";
 import EnterNameScreen from "../screens/auth/SignUp/EnterNameScreen/EnterNameScreen";
 import EnterUsernameScreen from "../screens/auth/SignUp/EnterUsernameScreen/EnterUsernameScreen";
+import EnterPhoneNumberScreen from "../screens/auth/SignUp/EnterPhoneNumberScreen/EnterPhoneNumberScreen";
+import ConfirmationCodeScreen from "../screens/auth/SignUp/ConfirmationCodeScreen/ConfirmationCodeScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -251,6 +253,22 @@ const AppNavigator = () => {
           }}
           name="EnterUsername"
           component={EnterUsernameScreen}
+        />
+
+        <Stack.Screen
+          options={{
+            title: "great! now just ur number.",
+          }}
+          name="EnterNumber"
+          component={EnterPhoneNumberScreen}
+        />
+
+        <Stack.Screen
+          options={{
+            title: "please enter the code we sent you.",
+          }}
+          name="ConfirmationCode"
+          component={ConfirmationCodeScreen}
         />
       </Stack.Group>
 

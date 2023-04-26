@@ -12,8 +12,8 @@ import { styles } from "./styles";
 import { StatusBar } from "expo-status-bar";
 import { colors } from "../../../../../components/colors";
 
-const EnterUsernameScreen = ({ navigation }) => {
-  const [username, setUsername] = useState<string>("");
+const EnterPhoneNumberScreen = ({ navigation }) => {
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
 
   return (
     <ScrollView keyboardShouldPersistTaps={"always"} style={styles.container}>
@@ -21,19 +21,14 @@ const EnterUsernameScreen = ({ navigation }) => {
 
       <TextInput
         style={styles.textInput}
-        placeholder="@username"
+        placeholder="+44 123456789"
         placeholderTextColor={"rgba(255,255,255,0.5)"}
         autoCorrect={false}
-        value={username}
+        value={phoneNumber}
+        inputMode="numeric"
+        keyboardType="phone-pad"
         onChangeText={(text) => {
-          const alphanumericRegex = /[^a-zA-Z0-9]/g;
-          const cleanedText = text.replace(alphanumericRegex, "");
-
-          if (cleanedText.includes(" ")) {
-            setUsername(cleanedText.trim().toLowerCase());
-          } else {
-            setUsername(cleanedText.toLowerCase());
-          }
+          setPhoneNumber(text);
         }}
         autoFocus={true}
         cursorColor="#FFF"
@@ -52,16 +47,16 @@ const EnterUsernameScreen = ({ navigation }) => {
         //keyboardVerticalOffset={10}
       >
         <TouchableOpacity
-          disabled={username.length <= 3}
+          disabled={phoneNumber.length <= 7}
           onPress={() => {
             //   updateFirstName();
-            navigation.navigate("EnterNumber");
+            navigation.navigate("ConfirmationCode");
           }}
           style={[
             styles.nextButton,
             {
               backgroundColor:
-                username.length > 3 ? "#FFF" : "rgba(255, 255, 255, 0.5)",
+                phoneNumber.length > 7 ? "#FFF" : "rgba(255, 255, 255, 0.5)",
             },
           ]}
         >
@@ -69,7 +64,7 @@ const EnterUsernameScreen = ({ navigation }) => {
             style={[
               styles.buttonText,
               {
-                color: username.length > 3 ? colors.purple : colors.purpl30,
+                color: phoneNumber.length > 7 ? colors.purple : colors.purpl30,
               },
             ]}
           >
@@ -81,4 +76,4 @@ const EnterUsernameScreen = ({ navigation }) => {
   );
 };
 
-export default EnterUsernameScreen;
+export default EnterPhoneNumberScreen;

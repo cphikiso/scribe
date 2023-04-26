@@ -12,8 +12,8 @@ import { styles } from "./styles";
 import { StatusBar } from "expo-status-bar";
 import { colors } from "../../../../../components/colors";
 
-const EnterUsernameScreen = ({ navigation }) => {
-  const [username, setUsername] = useState<string>("");
+const ConfirmationCodeScreen = ({ navigation }) => {
+  const [confirmationCode, setConfirmationCode] = useState<string>("");
 
   return (
     <ScrollView keyboardShouldPersistTaps={"always"} style={styles.container}>
@@ -21,19 +21,14 @@ const EnterUsernameScreen = ({ navigation }) => {
 
       <TextInput
         style={styles.textInput}
-        placeholder="@username"
+        placeholder="_ _ _   _ _ _"
         placeholderTextColor={"rgba(255,255,255,0.5)"}
         autoCorrect={false}
-        value={username}
+        value={confirmationCode}
+        inputMode="numeric"
+        keyboardType="phone-pad"
         onChangeText={(text) => {
-          const alphanumericRegex = /[^a-zA-Z0-9]/g;
-          const cleanedText = text.replace(alphanumericRegex, "");
-
-          if (cleanedText.includes(" ")) {
-            setUsername(cleanedText.trim().toLowerCase());
-          } else {
-            setUsername(cleanedText.toLowerCase());
-          }
+          setConfirmationCode(text);
         }}
         autoFocus={true}
         cursorColor="#FFF"
@@ -52,16 +47,18 @@ const EnterUsernameScreen = ({ navigation }) => {
         //keyboardVerticalOffset={10}
       >
         <TouchableOpacity
-          disabled={username.length <= 3}
+          disabled={confirmationCode.length !== 6}
           onPress={() => {
             //   updateFirstName();
-            navigation.navigate("EnterNumber");
+            navigation.navigate("TabStack");
           }}
           style={[
             styles.nextButton,
             {
               backgroundColor:
-                username.length > 3 ? "#FFF" : "rgba(255, 255, 255, 0.5)",
+                confirmationCode.length == 6
+                  ? "#FFF"
+                  : "rgba(255, 255, 255, 0.5)",
             },
           ]}
         >
@@ -69,11 +66,12 @@ const EnterUsernameScreen = ({ navigation }) => {
             style={[
               styles.buttonText,
               {
-                color: username.length > 3 ? colors.purple : colors.purpl30,
+                color:
+                  confirmationCode.length == 6 ? colors.purple : colors.purpl30,
               },
             ]}
           >
-            Next
+            Let's go!
           </Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
@@ -81,4 +79,4 @@ const EnterUsernameScreen = ({ navigation }) => {
   );
 };
 
-export default EnterUsernameScreen;
+export default ConfirmationCodeScreen;
