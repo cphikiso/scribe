@@ -28,14 +28,16 @@ const TopTabs = () => {
     <>
       <TopTab.Navigator
         screenOptions={{
+          tabBarInactiveTintColor: colors.grey30,
+          tabBarActiveTintColor: colors.purple,
           tabBarContentContainerStyle: { marginTop: insets.top },
           tabBarLabelStyle: {
             fontSize: 14,
             textTransform: "none",
-            fontFamily: "SFProRoundedBold",
+            fontFamily: "SFProRoundedHeavy",
           },
           tabBarIndicatorStyle: {
-            backgroundColor: "#000",
+            backgroundColor: colors.purple,
           },
         }}
       >
@@ -186,7 +188,7 @@ const AppNavigator = () => {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="Home" component={TabNavigator} />
+      <Stack.Screen name="TabStack" component={TabNavigator} />
       <Stack.Group screenOptions={{ presentation: "transparentModal" }}>
         <Stack.Screen name="CreatePost" component={CreatePostScreen} />
       </Stack.Group>
