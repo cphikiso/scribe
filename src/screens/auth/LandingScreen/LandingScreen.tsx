@@ -1,14 +1,19 @@
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import { View, Text, TouchableOpacity, Image, Platform } from "react-native";
 import React from "react";
 import { styles } from "./styles";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { colors } from "../../../../components/colors";
 
-const LandingScreen = () => {
+const LandingScreen = ({ navigation }) => {
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
+    <View
+      style={[
+        styles.container,
+        { paddingTop: Platform.OS === "ios" ? insets.top : 24 },
+      ]}
+    >
       <Image
         source={require("../../../../assets/wandLogoPurple.png")}
         style={styles.logo}
@@ -21,7 +26,10 @@ const LandingScreen = () => {
       </View>
 
       <View>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("EnterName")}
+        >
           <Text style={styles.buttonText}>Sign up</Text>
         </TouchableOpacity>
         <TouchableOpacity

@@ -18,6 +18,8 @@ import CreatePostScreen from "../screens/home/PostCreation/CreatePostScreen/Crea
 import { useNavigation } from "@react-navigation/core";
 import TranscriptionDoneScreen from "../screens/home/PostCreation/TransciptionDoneScreen/TranscriptionDoneScreen";
 import LandingScreen from "../screens/auth/LandingScreen/LandingScreen";
+import EnterNameScreen from "../screens/auth/SignUp/EnterNameScreen/EnterNameScreen";
+import EnterUsernameScreen from "../screens/auth/SignUp/EnterUsernameScreen/EnterUsernameScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -205,9 +207,51 @@ const AppNavigator = () => {
         headerShown: false,
       }}
     >
-      {/* AUTH  */}
+      {/* AUTH */}
       <Stack.Group>
         <Stack.Screen name="Landing" component={LandingScreen} />
+      </Stack.Group>
+      {/* sign up flow */}
+      <Stack.Group
+        screenOptions={{
+          headerShown: true,
+          headerBackVisible: false,
+          headerShadowVisible: false,
+          headerLargeStyle: { backgroundColor: colors.purple },
+          headerLargeTitle: true,
+          headerLargeTitleStyle: {
+            fontFamily: "SFProRoundedBold",
+            fontSize: 28,
+            color: "#fff",
+          },
+          headerLeft: ({}) => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Image
+                style={{
+                  width: 28,
+                  height: 28,
+                }}
+                source={require("../../assets/appIcons/carretLeftLargeWhite.png")}
+              />
+            </TouchableOpacity>
+          ),
+        }}
+      >
+        <Stack.Screen
+          options={{
+            title: "hi! what's your name?",
+          }}
+          name="EnterName"
+          component={EnterNameScreen}
+        />
+
+        <Stack.Screen
+          options={{
+            title: "next, create your @ name.",
+          }}
+          name="EnterUsername"
+          component={EnterUsernameScreen}
+        />
       </Stack.Group>
 
       <Stack.Screen name="TabStack" component={TabNavigator} />
