@@ -14,12 +14,15 @@ import NotificationsScreen from "../screens/notifications/NotificationsScreen/No
 import HomeCreatePostButton from "../../components/HomeCreatePost/HomeCreatePostButton";
 import { colors } from "../../components/colors";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import CreatePostScreen from "../screens/home/PostCreation/CreatePostScreen/CreatePostScreen";
+import { useNavigation } from "@react-navigation/core";
 
 const Tab = createBottomTabNavigator();
 
 const TopTab = createMaterialTopTabNavigator();
 
 const TopTabs = () => {
+  const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   return (
     <>
@@ -44,6 +47,7 @@ const TopTabs = () => {
         <TopTab.Screen name="Everyone" component={EveryoneScreen} />
       </TopTab.Navigator>
       <TouchableOpacity
+        onPress={() => navigation.navigate("CreatePost")}
         style={{
           height: 54,
           width: 54,
@@ -183,6 +187,9 @@ const AppNavigator = () => {
       }}
     >
       <Stack.Screen name="Home" component={TabNavigator} />
+      <Stack.Group screenOptions={{ presentation: "transparentModal" }}>
+        <Stack.Screen name="CreatePost" component={CreatePostScreen} />
+      </Stack.Group>
     </Stack.Navigator>
   );
 };
