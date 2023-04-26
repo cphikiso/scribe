@@ -64,9 +64,15 @@ export const styles = StyleSheet.create({
   },
 
   icon: {
-    justifyContent: "center",
     alignItems: "center",
     height: 44,
-    width: 44,
+    width: 50,
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  actionText: {
+    color: "rgba(60,60,67,0.6)",
+    fontFamily: "SFProRoundedRegular",
+    fontSize: 14,
   },
 });

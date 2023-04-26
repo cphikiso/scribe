@@ -12,25 +12,33 @@ import { Image, TouchableOpacity, View, Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import NotificationsScreen from "../screens/notifications/NotificationsScreen/NotificationsScreen";
 import HomeCreatePostButton from "../../components/HomeCreatePost/HomeCreatePostButton";
+import { colors } from "../../components/colors";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import CreatePostScreen from "../screens/home/PostCreation/CreatePostScreen/CreatePostScreen";
+import { useNavigation } from "@react-navigation/core";
+import TranscriptionDoneScreen from "../screens/home/PostCreation/TransciptionDoneScreen/TranscriptionDoneScreen";
 
 const Tab = createBottomTabNavigator();
 
 const TopTab = createMaterialTopTabNavigator();
 
 const TopTabs = () => {
+  const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   return (
     <>
       <TopTab.Navigator
         screenOptions={{
+          tabBarInactiveTintColor: colors.grey30,
+          tabBarActiveTintColor: colors.purple,
           tabBarContentContainerStyle: { marginTop: insets.top },
           tabBarLabelStyle: {
             fontSize: 14,
             textTransform: "none",
-            fontFamily: "SFProRoundedBold",
+            fontFamily: "SFProRoundedHeavy",
           },
           tabBarIndicatorStyle: {
-            backgroundColor: "#000",
+            backgroundColor: colors.purple,
           },
         }}
       >
@@ -41,7 +49,25 @@ const TopTabs = () => {
         />
         <TopTab.Screen name="Everyone" component={EveryoneScreen} />
       </TopTab.Navigator>
-      <HomeCreatePostButton />
+      <TouchableOpacity
+        onPress={() => navigation.navigate("CreatePost")}
+        style={{
+          height: 54,
+          width: 54,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: colors.purple,
+          borderRadius: 44,
+          position: "absolute",
+          bottom: 20,
+          right: 20,
+        }}
+      >
+        <Image
+          source={require("../../assets/appIcons/plus.png")}
+          style={{ height: 28, width: 28 }}
+        />
+      </TouchableOpacity>
     </>
   );
 };
@@ -69,7 +95,8 @@ const TabNavigator = () => {
           ),
         }}
       />
-      <Tab.Screen
+
+      {/* <Tab.Screen
         name="Search"
         component={SearchScreen}
         options={{
@@ -81,14 +108,20 @@ const TabNavigator = () => {
             />
           ),
         }}
-      />
+      /> */}
       <Tab.Screen
         name="Notifications"
         component={NotificationsScreen}
         options={{
           headerShown: true,
           headerTitle: () => (
-            <Text style={{ fontSize: 18, fontFamily: "SFProRoundedBold" }}>
+            <Text
+              style={{
+                fontSize: 18,
+                fontFamily: "SFProRoundedHeavy",
+                color: colors.purple,
+              }}
+            >
               Notifications
             </Text>
           ),
@@ -108,7 +141,13 @@ const TabNavigator = () => {
           headerShown: true,
 
           headerTitle: () => (
-            <Text style={{ fontSize: 18, fontFamily: "SFProRoundedBold" }}>
+            <Text
+              style={{
+                fontSize: 18,
+                fontFamily: "SFProRoundedHeavy",
+                color: colors.purple,
+              }}
+            >
               @phikiso
             </Text>
           ),
@@ -154,8 +193,50 @@ const TabNavigator = () => {
   );
 };
 
+const Stack = createNativeStackNavigator();
+
 const AppNavigator = () => {
-  return <TabNavigator />;
+  const navigation = useNavigation();
+
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="TabStack" component={TabNavigator} />
+      <Stack.Group screenOptions={{ presentation: "transparentModal" }}>
+        <Stack.Screen name="CreatePost" component={CreatePostScreen} />
+        <Stack.Screen
+          options={{
+            headerShown: true,
+            headerStyle: { backgroundColor: colors.purple },
+            headerShadowVisible: false,
+            headerTitle: " ",
+            headerRight: () => (
+              <TouchableOpacity
+                style={{
+                  height: 36,
+                  width: 36,
+                  borderRadius: 36,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                onPress={() => navigation.goBack()}
+              >
+                <Image
+                  source={require("../../assets/appIcons/close.png")}
+                  style={{ height: 36, width: 36 }}
+                />
+              </TouchableOpacity>
+            ),
+          }}
+          name="Transcribe"
+          component={TranscriptionDoneScreen}
+        />
+      </Stack.Group>
+    </Stack.Navigator>
+  );
 };
 
 export default AppNavigator;

@@ -3,23 +3,36 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./stylesNotificationItem";
 
-const NotificationItem = ({ notification }) => {
+interface NotificationItemProps {
+  notification: {
+    index: number;
+    item: {
+      id: number;
+      action: string;
+      name: string;
+      username: string;
+      time: string;
+      profilePic: any;
+    };
+  };
+}
+
+const NotificationItem = ({ notification }: NotificationItemProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.outerFlexRow}>
         <View style={styles.innerFlexRow}>
           <Image
-            source={require("../assets/pic.jpg")}
+            source={notification.item.profilePic}
             style={styles.profilePic}
           />
           <View>
             <View style={styles.titleRow}>
-              <Text style={styles.name}>Travis Scott</Text>
-              <Text style={styles.username}>@laflame</Text>
-              <View style={styles.dot} />
-              <Text style={styles.timeText}>2m</Text>
+              <Text style={styles.name}>{notification.item.name}</Text>
+              <Text style={styles.username}>@{notification.item.username}</Text>
+              <Text style={styles.timeText}>· {notification.item.time}</Text>
             </View>
-            <Text style={styles.bodyText}>{notification.action}</Text>
+            <Text style={styles.bodyText}>{notification.item.action}</Text>
           </View>
         </View>
       </View>
