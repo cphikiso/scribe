@@ -95,7 +95,8 @@ const TabNavigator = () => {
           ),
         }}
       />
-      <Tab.Screen
+
+      {/* <Tab.Screen
         name="Search"
         component={SearchScreen}
         options={{
@@ -107,14 +108,20 @@ const TabNavigator = () => {
             />
           ),
         }}
-      />
+      /> */}
       <Tab.Screen
         name="Notifications"
         component={NotificationsScreen}
         options={{
           headerShown: true,
           headerTitle: () => (
-            <Text style={{ fontSize: 18, fontFamily: "SFProRoundedBold" }}>
+            <Text
+              style={{
+                fontSize: 18,
+                fontFamily: "SFProRoundedHeavy",
+                color: colors.purple,
+              }}
+            >
               Notifications
             </Text>
           ),
@@ -134,7 +141,13 @@ const TabNavigator = () => {
           headerShown: true,
 
           headerTitle: () => (
-            <Text style={{ fontSize: 18, fontFamily: "SFProRoundedBold" }}>
+            <Text
+              style={{
+                fontSize: 18,
+                fontFamily: "SFProRoundedHeavy",
+                color: colors.purple,
+              }}
+            >
               @phikiso
             </Text>
           ),

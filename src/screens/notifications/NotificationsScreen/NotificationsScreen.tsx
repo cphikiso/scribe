@@ -11,7 +11,7 @@ const NotificationsScreen = () => {
       <FlatList
         data={notifications}
         renderItem={(notification) => (
-          <NotificationItem notification={notification.item} />
+          <NotificationItem notification={notification} />
         )}
       />
     </View>
@@ -21,9 +21,44 @@ const NotificationsScreen = () => {
 export default NotificationsScreen;
 
 const notifications = [
-  { id: 1, action: "Liked your post" },
-  { id: 2, action: "Retweeted your post" },
-  { id: 3, action: "Started following you" },
-  { id: 4, action: "Liked your post" },
-  { id: 5, action: "Commented on your post" },
+  {
+    id: 1,
+    name: "Michael",
+    username: "jordan",
+    time: "3m",
+    profilePic: require("../../../../assets/pic.jpg"),
+    action: "Liked your post",
+  },
+  {
+    id: 2,
+    name: "Michael",
+    username: "jordan",
+    time: "5m",
+    profilePic: require("../../../../assets/pic.jpg"),
+    action: "Retweeted your post",
+  },
+  {
+    id: 3,
+    name: "Michael",
+    username: "jordan",
+    time: "12m",
+    profilePic: require("../../../../assets/pic.jpg"),
+    action: "Started following you",
+  },
+  {
+    id: 4,
+    name: "Michael",
+    username: "jordan",
+    time: "23m",
+    profilePic: require("../../../../assets/pic.jpg"),
+    action: "Liked your post",
+  },
+  {
+    id: 5,
+    name: "Michael",
+    username: "jordan",
+    time: "2h",
+    profilePic: require("../../../../assets/pic.jpg"),
+    action: "Commented on your post",
+  },
 ];

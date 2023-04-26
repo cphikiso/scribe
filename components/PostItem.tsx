@@ -3,28 +3,38 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./stylesPostItem";
 
-const PostItem = ({ post }) => {
+interface PostItemProps {
+  post: {
+    index: number;
+    item: {
+      id: number;
+      userName: string;
+      name: string;
+      time: string;
+      body: string;
+      profilePic: any;
+      audio: string;
+      comments: number;
+      reposts: number;
+      likes: number;
+    };
+  };
+}
+
+const PostItem = ({ post }: PostItemProps) => {
+  console.log("post", post);
   return (
     <View style={styles.container}>
       <View style={styles.outerFlexRow}>
         <View style={styles.innerFlexRow}>
-          <Image
-            source={require("../assets/pic.jpg")}
-            style={styles.profilePic}
-          />
+          <Image source={post.item.profilePic} style={styles.profilePic} />
           <View>
             <View style={styles.titleRow}>
-              <Text style={styles.name}>Travis Scott</Text>
-              <Text style={styles.username}>@laflame</Text>
-              <View style={styles.dot} />
-              <Text style={styles.timeText}>2m</Text>
+              <Text style={styles.name}>{post.item.name}</Text>
+              <Text style={styles.username}>@{post.item.userName}</Text>
+              <Text style={styles.timeText}>· {post.item.time}</Text>
             </View>
-            <Text style={styles.bodyText}>
-              these aren’t just random questions. they reveal (and motivate)
-              some key design decisions. for each of these, what do you *want*
-              the answer to be, and why? what is the “price” of your chosen
-              answer?
-            </Text>
+            <Text style={styles.bodyText}>{post.item.body}</Text>
           </View>
         </View>
         <TouchableOpacity style={styles.playAudioButton}>
@@ -38,6 +48,9 @@ const PostItem = ({ post }) => {
             color={"rgba(60,60,67,0.6)"}
             size={24}
           />
+          <Text style={styles.actionText}>
+            {post.item.comments > 0 && post.item.comments}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.icon}>
           <Ionicons
@@ -45,6 +58,9 @@ const PostItem = ({ post }) => {
             color={"rgba(60,60,67,0.6)"}
             size={24}
           />
+          <Text style={styles.actionText}>
+            {post.item.reposts > 0 && post.item.reposts}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.icon}>
           <Ionicons
@@ -52,6 +68,9 @@ const PostItem = ({ post }) => {
             color={"rgba(60,60,67,0.6)"}
             size={24}
           />
+          <Text style={styles.actionText}>
+            {post.item.likes > 0 && post.item.likes}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.icon}>
           <Ionicons
