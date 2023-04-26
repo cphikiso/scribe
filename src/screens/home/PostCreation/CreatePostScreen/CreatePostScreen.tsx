@@ -1,10 +1,11 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import React, { useState } from "react";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { styles } from "./styles";
 import Lottie from "lottie-react-native";
 import { Audio } from "expo-av";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { colors } from "../../../../../components/colors";
 
 const CreatePostScreen = ({ navigation }) => {
   const [recording, setRecording] = useState();
@@ -51,18 +52,23 @@ const CreatePostScreen = ({ navigation }) => {
         />
       </View>
       <View style={styles.bottomSheet}>
-        <TouchableOpacity
-          style={styles.cancel}
-          hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
-          onPress={() => {
-            setModalVisible(false);
-          }}
-        >
-          <Text style={styles.cancelText}>Cancel</Text>
-        </TouchableOpacity>
-        <Text style={styles.modalHeader}>New Post</Text>
-
-        <Text style={styles.timerText}>00:04.59</Text>
+        <View style={styles.headerModal}>
+          <Text style={{ color: colors.purple }}>nulls</Text>
+          <Text style={styles.modalHeader}>Recording</Text>
+          <TouchableOpacity
+            style={styles.cancel}
+            hitSlop={{ top: 44, bottom: 44, left: 44, right: 44 }}
+            onPress={() => navigation.goBack()}
+          >
+            <Image
+              source={require("../../../../../assets/appIcons/close.png")}
+              style={{ height: 28, width: 28 }}
+            />
+          </TouchableOpacity>
+        </View>
+        <Text
+          style={[styles.timerText, !recording && { color: colors.purple }]}
+        >{`00:04.59`}</Text>
         <View style={styles.waveForm}>
           {recordingProcess ? (
             <Lottie
@@ -70,13 +76,16 @@ const CreatePostScreen = ({ navigation }) => {
               autoPlay
               loop
             />
-          ) : listening ? (
-            <Lottie
-              source={require("../../../../../assets/soundwaves.json")}
-              autoPlay
-              loop
-            />
-          ) : null}
+          ) : (
+            <Text
+              style={[
+                styles.timerText,
+                { fontSize: 38, top: 50, color: "white" },
+              ]}
+            >
+              00:04.59
+            </Text>
+          )}
         </View>
         {recordingProcess ? (
           <TouchableOpacity
@@ -86,33 +95,35 @@ const CreatePostScreen = ({ navigation }) => {
             }}
             style={{ alignSelf: "center" }}
           >
-            <Ionicons name="ios-stop-circle-outline" size={68} color="black" />
+            <Ionicons name="ios-stop-circle-outline" size={68} color="white" />
           </TouchableOpacity>
         ) : (
           <>
-            {!listening ? (
-              <TouchableOpacity
-                onPress={() => setListening(true)}
-                style={styles.playbackIconContainer}
-              >
-                <Ionicons
-                  name="ios-play-circle-outline"
-                  size={68}
-                  color="black"
-                />
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                onPress={() => setListening(false)}
-                style={styles.playbackIconContainer}
-              >
-                <Ionicons
-                  name="ios-pause-circle-outline"
-                  size={68}
-                  color="black"
-                />
-              </TouchableOpacity>
-            )}
+            <View>
+              {!listening ? (
+                <TouchableOpacity
+                  onPress={() => setListening(true)}
+                  style={styles.playbackIconContainer}
+                >
+                  <Ionicons
+                    name="ios-play-circle-outline"
+                    size={68}
+                    color="white"
+                  />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  onPress={() => setListening(false)}
+                  style={styles.playbackIconContainer}
+                >
+                  <Ionicons
+                    name="ios-pause-circle-outline"
+                    size={68}
+                    color="white"
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
             <TouchableOpacity style={styles.modalButton}>
               <Text style={styles.buttonText}>Transcribe</Text>
               {/* Start scribing */}
