@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Scribe - speak your mind",
+    "name": "Scribe",
     "slug": "scribe",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -14,7 +14,11 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.scribe.www"
+      "bundleIdentifier": "com.scribe.www",
+      "buildNumber": "6",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
