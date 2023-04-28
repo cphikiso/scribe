@@ -14,11 +14,18 @@ export const styles = StyleSheet.create({
   },
   pickerContainer: {
     height: 60,
-    width: "20%",
+    width: "22%",
     backgroundColor: "rgba(255, 255, 255, 0.2)",
     borderWidth: 2,
     borderRadius: 12,
     borderColor: "rgba(255, 255, 255, 0.6)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  pickerText: {
+    fontFamily: "SFProRoundedSemibold",
+    fontSize: 20,
+    color: "#FFF",
   },
   textInput: {
     height: 60,

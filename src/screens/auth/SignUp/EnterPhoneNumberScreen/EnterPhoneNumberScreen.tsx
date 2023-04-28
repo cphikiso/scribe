@@ -6,20 +6,39 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
   ScrollView,
+  Modal,
 } from "react-native";
 import React, { useState } from "react";
 import { styles } from "./styles";
 import { StatusBar } from "expo-status-bar";
 import { colors } from "../../../../../components/colors";
+import { CountryPicker } from "react-native-country-codes-picker";
 
 const EnterPhoneNumberScreen = ({ navigation }) => {
   const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [countryCode, setCountryCode] = useState<string>("+44");
+  const [showCountryPicker, setShowCountryPicker] = useState<boolean>(false);
 
   return (
     <ScrollView keyboardShouldPersistTaps={"always"} style={styles.container}>
+      <Modal visible={showCountryPicker} transparent={true}>
+        <CountryPicker
+          show={showCountryPicker}
+          pickerButtonOnPress={(item) => {
+            setCountryCode(item.dial_code);
+            setShowCountryPicker(false);
+          }}
+          popularCountries={["gb", "us"]}
+        />
+      </Modal>
       <StatusBar style="light" />
       <View style={styles.numberContainer}>
-        <TouchableOpacity style={styles.pickerContainer}></TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => setShowCountryPicker(true)}
+          style={styles.pickerContainer}
+        >
+          <Text style={styles.pickerText}>{countryCode}</Text>
+        </TouchableOpacity>
         <TextInput
           style={styles.textInput}
           placeholder="1234 56789"
