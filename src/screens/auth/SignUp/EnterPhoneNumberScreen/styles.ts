@@ -8,9 +8,21 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: Platform.OS === "ios" ? 148 : 28,
   },
+  numberContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  pickerContainer: {
+    height: 60,
+    width: "20%",
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    borderWidth: 2,
+    borderRadius: 12,
+    borderColor: "rgba(255, 255, 255, 0.6)",
+  },
   textInput: {
     height: 60,
-    width: "100%",
+    width: "75%",
     backgroundColor: "rgba(255, 255, 255, 0.2)",
     borderWidth: 2,
     borderRadius: 12,

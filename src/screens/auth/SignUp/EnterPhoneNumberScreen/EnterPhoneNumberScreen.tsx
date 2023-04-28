@@ -18,23 +18,25 @@ const EnterPhoneNumberScreen = ({ navigation }) => {
   return (
     <ScrollView keyboardShouldPersistTaps={"always"} style={styles.container}>
       <StatusBar style="light" />
-
-      <TextInput
-        style={styles.textInput}
-        placeholder="+44 123456789"
-        placeholderTextColor={"rgba(255,255,255,0.5)"}
-        autoCorrect={false}
-        value={phoneNumber}
-        inputMode="numeric"
-        keyboardType="phone-pad"
-        onChangeText={(text) => {
-          setPhoneNumber(text);
-        }}
-        autoFocus={true}
-        cursorColor="#FFF"
-        selectionColor={"#FFF"}
-        maxLength={18}
-      />
+      <View style={styles.numberContainer}>
+        <TouchableOpacity style={styles.pickerContainer}></TouchableOpacity>
+        <TextInput
+          style={styles.textInput}
+          placeholder="1234 56789"
+          placeholderTextColor={"rgba(255,255,255,0.5)"}
+          autoCorrect={false}
+          value={phoneNumber}
+          inputMode="numeric"
+          keyboardType="phone-pad"
+          onChangeText={(text) => {
+            setPhoneNumber(text);
+          }}
+          autoFocus={true}
+          cursorColor="#FFF"
+          selectionColor={"#FFF"}
+          maxLength={18}
+        />
+      </View>
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
