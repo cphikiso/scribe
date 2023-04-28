@@ -8,23 +8,51 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: Platform.OS === "ios" ? 148 : 28,
   },
+
+  contentContainer: { paddingBottom: 48 },
+  scrollView: {
+    flex: 2,
+    marginTop: 16,
+    backgroundColor: "#FFF",
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    paddingVertical: 28,
+    paddingHorizontal: 16,
+  },
+  countryListContainer: {
+    justifyContent: "center",
+    marginBottom: 20,
+  },
+  textsRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  name: {
+    fontSize: 15,
+    fontFamily: "SFProRoundedBold",
+    color: "#000",
+    // marginBottom: 16,
+  },
   numberContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
   pickerContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
     height: 60,
     width: "22%",
     backgroundColor: "rgba(255, 255, 255, 0.2)",
     borderWidth: 2,
     borderRadius: 12,
     borderColor: "rgba(255, 255, 255, 0.6)",
-    justifyContent: "center",
+
     alignItems: "center",
   },
   pickerText: {
     fontFamily: "SFProRoundedSemibold",
-    fontSize: 20,
+    fontSize: 16,
     color: "#FFF",
   },
   textInput: {

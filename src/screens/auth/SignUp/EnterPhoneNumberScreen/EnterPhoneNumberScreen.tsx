@@ -7,36 +7,92 @@ import {
   TouchableOpacity,
   ScrollView,
   Modal,
+  FlatList,
 } from "react-native";
 import React, { useState } from "react";
 import { styles } from "./styles";
 import { StatusBar } from "expo-status-bar";
 import { colors } from "../../../../../components/colors";
-import { CountryPicker } from "react-native-country-codes-picker";
+import { CountryItem, countryCodes } from "../../../../../components/Countries";
 
 const EnterPhoneNumberScreen = ({ navigation }) => {
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [countryCode, setCountryCode] = useState<string>("+44");
+  const [countryFlag, setCountryFlag] = useState<string>("🇬🇧");
   const [showCountryPicker, setShowCountryPicker] = useState<boolean>(false);
+
+  const [codeNumber, setCodeNumber] = useState<string>("");
+  const [confirmModal, setConfirmModal] = useState<boolean>(false);
 
   return (
     <ScrollView keyboardShouldPersistTaps={"always"} style={styles.container}>
-      <Modal visible={showCountryPicker} transparent={true}>
-        <CountryPicker
-          show={showCountryPicker}
-          pickerButtonOnPress={(item) => {
-            setCountryCode(item.dial_code);
-            setShowCountryPicker(false);
-          }}
-          popularCountries={["gb", "us"]}
+      <StatusBar style="light" />
+
+      <Modal style={{ flex: 1 }} transparent={true} visible={showCountryPicker}>
+        <FlatList
+          contentContainerStyle={styles.contentContainer}
+          style={styles.scrollView}
+          data={countryCodes}
+          renderItem={({
+            item,
+            index,
+          }: {
+            item: CountryItem;
+            index: number;
+          }) => (
+            <TouchableOpacity
+              key={index}
+              onPress={() => {
+                setCountryCode(item?.dial_code);
+                setCountryFlag(item?.flag);
+                setShowCountryPicker(false);
+              }}
+              style={styles.countryListContainer}
+            >
+              <View style={styles.textsRow}>
+                <Text
+                  style={{ textAlign: "center", fontSize: 24, marginRight: 16 }}
+                >
+                  {item?.flag}
+                </Text>
+                <Text style={styles.name}>{item?.dial_code}</Text>
+
+                <Text
+                  style={[
+                    styles.name,
+                    {
+                      position: "absolute",
+                      left: "25%",
+                    },
+                  ]}
+                >
+                  {item?.name["en"]}
+                </Text>
+              </View>
+              <View
+                style={{
+                  width: "100%",
+                  height: 1,
+                  backgroundColor: "rgba(255,255,255,0.2)",
+                }}
+              />
+            </TouchableOpacity>
+          )}
         />
       </Modal>
-      <StatusBar style="light" />
+      <Modal
+        style={{ flex: 1 }}
+        transparent={true}
+        visible={confirmModal}
+      ></Modal>
       <View style={styles.numberContainer}>
         <TouchableOpacity
           onPress={() => setShowCountryPicker(true)}
           style={styles.pickerContainer}
         >
+          <Text style={[styles.pickerText, { marginRight: 8 }]}>
+            {countryFlag}
+          </Text>
           <Text style={styles.pickerText}>{countryCode}</Text>
         </TouchableOpacity>
         <TextInput
