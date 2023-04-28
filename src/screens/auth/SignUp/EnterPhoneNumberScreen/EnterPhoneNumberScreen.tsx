@@ -166,32 +166,39 @@ const EnterPhoneNumberScreen = ({ navigation }) => {
         }}
         //keyboardVerticalOffset={10}
       >
-        <TouchableOpacity
-          disabled={phoneNumber.length <= 7}
-          onPress={() => {
-            setCodeNumber(countryCode + phoneNumber);
+        {confirmModal ? null : (
+          <TouchableOpacity
+            disabled={phoneNumber.length !== 10 && phoneNumber.length !== 6}
+            onPress={() => {
+              setCodeNumber(countryCode + phoneNumber);
 
-            setConfirmModal(true);
-          }}
-          style={[
-            styles.nextButton,
-            {
-              backgroundColor:
-                phoneNumber.length > 7 ? "#FFF" : "rgba(255, 255, 255, 0.5)",
-            },
-          ]}
-        >
-          <Text
+              setConfirmModal(true);
+            }}
             style={[
-              styles.buttonText,
+              styles.nextButton,
               {
-                color: phoneNumber.length > 7 ? colors.purple : colors.purpl30,
+                backgroundColor:
+                  phoneNumber.length == 10 || phoneNumber.length == 6
+                    ? "#FFF"
+                    : "rgba(255, 255, 255, 0.5)",
               },
             ]}
           >
-            Next
-          </Text>
-        </TouchableOpacity>
+            <Text
+              style={[
+                styles.buttonText,
+                {
+                  color:
+                    phoneNumber.length == 10 || phoneNumber.length == 6
+                      ? colors.purple
+                      : colors.purpl30,
+                },
+              ]}
+            >
+              Next
+            </Text>
+          </TouchableOpacity>
+        )}
       </KeyboardAvoidingView>
     </ScrollView>
   );

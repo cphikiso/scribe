@@ -91,7 +91,7 @@ export const styles = StyleSheet.create({
   },
   bottomSheet: {
     flex: 1.3,
-    marginBottom: 100,
+    marginBottom: 44,
     borderRadius: 44,
     backgroundColor: "#FFF",
     marginHorizontal: 16,

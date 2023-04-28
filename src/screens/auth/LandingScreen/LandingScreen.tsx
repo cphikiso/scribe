@@ -11,7 +11,7 @@ const LandingScreen = ({ navigation }) => {
     <View
       style={[
         styles.container,
-        { paddingTop: Platform.OS === "ios" ? insets.top : 24 },
+        { paddingTop: Platform.OS === "ios" ? insets.top : 48 },
       ]}
     >
       <Image
