@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.purple,
     paddingHorizontal: 16,
-    paddingTop: Platform.OS === "ios" ? 148 : 108,
+    paddingTop: Platform.OS === "ios" ? 148 : 28,
   },
   textInput: {
     height: 60,

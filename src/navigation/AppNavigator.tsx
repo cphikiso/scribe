@@ -219,6 +219,13 @@ const AppNavigator = () => {
           headerShown: true,
           headerBackVisible: false,
           headerShadowVisible: false,
+          // headerTitle: () => null,
+          headerTitleStyle: {
+            color: "#fff",
+            fontFamily: "SFProRoundedBold",
+            fontSize: 22,
+          },
+          headerStyle: { backgroundColor: colors.purple },
           headerLargeStyle: { backgroundColor: colors.purple },
           headerLargeTitle: true,
           headerLargeTitleStyle: {
