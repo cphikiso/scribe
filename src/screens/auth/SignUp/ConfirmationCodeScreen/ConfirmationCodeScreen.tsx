@@ -26,7 +26,8 @@ const ConfirmationCodeScreen = ({ navigation }) => {
         autoCorrect={false}
         value={confirmationCode}
         inputMode="numeric"
-        keyboardType="phone-pad"
+        autoComplete="sms-otp"
+        keyboardType="number-pad"
         onChangeText={(text) => {
           setConfirmationCode(text);
         }}
