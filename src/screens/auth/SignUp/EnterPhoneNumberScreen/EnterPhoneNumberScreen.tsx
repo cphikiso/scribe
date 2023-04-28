@@ -8,12 +8,16 @@ import {
   ScrollView,
   Modal,
   FlatList,
+  Animated,
+  TouchableWithoutFeedback,
+  Image,
 } from "react-native";
 import React, { useState } from "react";
 import { styles } from "./styles";
 import { StatusBar } from "expo-status-bar";
 import { colors } from "../../../../../components/colors";
 import { CountryItem, countryCodes } from "../../../../../components/Countries";
+import { FadeInRight, SlideOutRight } from "react-native-reanimated";
 
 const EnterPhoneNumberScreen = ({ navigation }) => {
   const [phoneNumber, setPhoneNumber] = useState<string>("");
@@ -80,11 +84,50 @@ const EnterPhoneNumberScreen = ({ navigation }) => {
           )}
         />
       </Modal>
-      <Modal
-        style={{ flex: 1 }}
-        transparent={true}
-        visible={confirmModal}
-      ></Modal>
+      <Modal style={{ flex: 1 }} transparent={true} visible={confirmModal}>
+        <View
+          style={{
+            backgroundColor: "rgba(0, 0,0, 0.6)",
+            flex: 1,
+          }}
+        >
+          <View style={styles.seeThrough}>
+            <TouchableWithoutFeedback
+              style={styles.touchableWithoutFeedback}
+              onPress={() => setConfirmModal(false)}
+            >
+              <View style={styles.touchableWithoutFeedback} />
+            </TouchableWithoutFeedback>
+          </View>
+
+          <View style={styles.bottomSheet}>
+            <View style={styles.headerModal}>
+              <TouchableOpacity
+                style={styles.cancel}
+                hitSlop={{ top: 44, bottom: 44, left: 44, right: 44 }}
+                onPress={() => setConfirmModal(false)}
+              >
+                <Image
+                  source={require("../../../../../assets/appIcons/close.png")}
+                  style={{ height: 28, width: 28 }}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.confirmContainer}>
+              <Text style={styles.confirmText}>
+                thanks! we'll send a {"\n"}verification code to: {"\n"}{" "}
+                <Text style={{ color: colors.purple }}>
+                  {" "}
+                  {codeNumber || `+44745785785`}
+                </Text>
+              </Text>
+            </View>
+            <TouchableOpacity onPress={() => {}} style={styles.modalButton}>
+              <Text style={[styles.buttonText, { color: "#FFF" }]}>okay</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
       <View style={styles.numberContainer}>
         <TouchableOpacity
           onPress={() => setShowCountryPicker(true)}
@@ -126,8 +169,9 @@ const EnterPhoneNumberScreen = ({ navigation }) => {
         <TouchableOpacity
           disabled={phoneNumber.length <= 7}
           onPress={() => {
-            //   updateFirstName();
-            navigation.navigate("ConfirmationCode");
+            setCodeNumber(countryCode + phoneNumber);
+
+            setConfirmModal(true);
           }}
           style={[
             styles.nextButton,

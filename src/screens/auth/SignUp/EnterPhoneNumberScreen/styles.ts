@@ -83,12 +83,73 @@ export const styles = StyleSheet.create({
     fontSize: 20,
   },
 
-  scrollView: {
-    flex: 1,
-    backgroundColor: "#FFF",
-    borderTopLeftRadius: 28,
-    borderTopRightRadius: 28,
-    paddingVertical: 28,
-    paddingHorizontal: 16,
+  // confirm modal
+  seeThrough: { flex: 2, width: "100%" },
+  touchableWithoutFeedback: {
+    height: "100%",
+    width: "100%",
   },
+  bottomSheet: {
+    flex: 1.3,
+    marginBottom: 100,
+    borderRadius: 44,
+    backgroundColor: "#FFF",
+    marginHorizontal: 16,
+    padding: 16,
+    shadowColor: "rgba(60,60,67,0.6)",
+    shadowOffset: {
+      width: 0,
+      height: 12,
+    },
+    shadowOpacity: 0.58,
+    shadowRadius: 16.0,
+
+    elevation: 24,
+  },
+
+  headerModal: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    marginTop: 16,
+    paddingRight: 16,
+    marginBottom: 4,
+  },
+  cancel: {
+    left: 8,
+    width: 28,
+    height: 28,
+    borderRadius: 28,
+    backgroundColor: colors.purple60,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalHeader: {
+    fontSize: 20,
+    fontFamily: "SFProRoundedHeavy",
+    color: "#FFF",
+  },
+  confirmContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+  },
+  confirmText: {
+    fontSize: 28,
+    fontFamily: "SFProRoundedHeavy",
+    color: colors.grey100,
+    textAlign: "center",
+  },
+  modalButton: {
+    width: "100%",
+    backgroundColor: colors.purple,
+    height: 58,
+    borderRadius: 44,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    bottom: 28,
+    alignSelf: "center",
+  },
+  // confirm modal
 });
