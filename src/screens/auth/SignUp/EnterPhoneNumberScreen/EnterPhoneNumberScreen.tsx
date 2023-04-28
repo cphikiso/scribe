@@ -116,10 +116,7 @@ const EnterPhoneNumberScreen = ({ navigation }) => {
             <View style={styles.confirmContainer}>
               <Text style={styles.confirmText}>
                 thanks! we'll send a {"\n"}verification code to: {"\n"}{" "}
-                <Text style={{ color: colors.purple }}>
-                  {" "}
-                  {codeNumber || `+44745785785`}
-                </Text>
+                <Text style={{ color: colors.purple }}>{codeNumber}</Text>
               </Text>
             </View>
             <TouchableOpacity onPress={() => {}} style={styles.modalButton}>
