@@ -143,6 +143,7 @@ const EnterPhoneNumberScreen = ({ navigation }) => {
           value={phoneNumber}
           inputMode="numeric"
           keyboardType="phone-pad"
+          autoComplete="cc-number"
           onChangeText={(text) => {
             setPhoneNumber(text);
           }}
