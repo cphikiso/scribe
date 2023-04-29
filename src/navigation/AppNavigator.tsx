@@ -207,6 +207,8 @@ const AppNavigator = () => {
   const navigation = useNavigation();
   const { user, currentUser } = useAuth();
 
+  console.log("user", user);
+
   return (
     <Stack.Navigator
       screenOptions={{

@@ -30,11 +30,11 @@ export default function App() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <NavigationContainer onReady={onLayoutRootView}>
-        <AuthProvider>
+      <AuthProvider>
+        <NavigationContainer onReady={onLayoutRootView}>
           <AppNavigator />
-        </AuthProvider>
-      </NavigationContainer>
+        </NavigationContainer>
+      </AuthProvider>
     </GestureHandlerRootView>
   );
 }

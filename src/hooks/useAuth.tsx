@@ -141,7 +141,9 @@ export const AuthProvider = ({ children }) => {
 
   const signUp = async (
     email: string,
-    password: string
+    password: string,
+    username: string,
+    fullName: string
   ): Promise<UserCredential> => {
     try {
       const newUserCredential = await createUserWithEmailAndPassword(
@@ -156,23 +158,12 @@ export const AuthProvider = ({ children }) => {
       );
       await setDoc(userProfileDocumentRef, {
         email,
-        interests: [],
         uid: newUserCredential.user.uid,
         isVerified: newUserCredential.user.emailVerified,
-        firstName: "",
-        displayName: newUserCredential.user.displayName,
-        gender: "",
-        age: "",
-        profilePicture: "",
-        datingPreference: "",
-        biography: "",
-        nationality: "",
-        university: {},
-        academicYear: "",
+        fullName,
+        username,
         timestamp: serverTimestamp(),
-        signUpComplete: false,
-        swipeCount: 0,
-        lastSwipe: null,
+        bio: "",
       }).then((authenticatedUser) => {
         console.log(" not yet authenticatedUser", authenticatedUser);
         // setUser(authenticatedUser.user);

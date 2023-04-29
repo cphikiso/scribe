@@ -15,6 +15,8 @@ import { StatusBar } from "expo-status-bar";
 import { useRoute } from "@react-navigation/native";
 import useAuth from "../../../../hooks/useAuth";
 import { colors } from "../../../../../components/colors";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../../../../firebaseConfig";
 
 const CreatePasswordScreen = ({ navigation }) => {
   const { params } = useRoute();
@@ -58,7 +60,7 @@ const CreatePasswordScreen = ({ navigation }) => {
         <TouchableOpacity
           disabled={password.length <= 6}
           onPress={() => {
-            signUp(email, password).catch((error) => {
+            signUp(email, password, username, fullName).catch((error) => {
               Alert.alert(error.message);
             });
           }}
