@@ -22,7 +22,6 @@ import { FadeInRight, SlideOutRight } from "react-native-reanimated";
 import useAuth from "../../../../hooks/useAuth";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { auth } from "../../../../../firebaseConfig";
-import firebase from "firebase/compat/app";
 
 const EnterPhoneNumberScreen = ({ navigation }) => {
   const [phoneNumber, setPhoneNumber] = useState<string>("");
@@ -49,9 +48,9 @@ const EnterPhoneNumberScreen = ({ navigation }) => {
     auth
   );
 
-  const appVerifier = new firebase.auth.RecaptchaVerifier(
-    "recaptcha-container"
-  );
+  // const appVerifier = new firebase.auth.RecaptchaVerifier(
+  //   "recaptcha-container"
+  // );
 
   // const recaptchaVerifier = useRef(null);
 
@@ -173,13 +172,13 @@ const EnterPhoneNumberScreen = ({ navigation }) => {
             </View>
             <TouchableOpacity
               onPress={() => {
-                signInWithPhoneNumber(auth, codeNumber, appVerifier)
-                  .then((confirmationResult) => {
-                    setConfirmationCode(confirmationResult);
-                  })
-                  .catch((error) => {
-                    console.log("signInError", error);
-                  });
+                // signInWithPhoneNumber(auth, codeNumber, appVerifier)
+                //   .then((confirmationResult) => {
+                //     setConfirmationCode(confirmationResult);
+                //   })
+                //   .catch((error) => {
+                //     console.log("signInError", error);
+                //   });
               }} //; navigation.navigate("EnterCodeScreen");
               style={styles.modalButton}
             >

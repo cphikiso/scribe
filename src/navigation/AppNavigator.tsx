@@ -22,6 +22,8 @@ import EnterNameScreen from "../screens/auth/SignUp/EnterNameScreen/EnterNameScr
 import EnterUsernameScreen from "../screens/auth/SignUp/EnterUsernameScreen/EnterUsernameScreen";
 import EnterPhoneNumberScreen from "../screens/auth/SignUp/EnterPhoneNumberScreen/EnterPhoneNumberScreen";
 import ConfirmationCodeScreen from "../screens/auth/SignUp/ConfirmationCodeScreen/ConfirmationCodeScreen";
+import EnterEmailScreen from "../screens/auth/SignUp/EnterEmail/EnterEmailScreen";
+import CreatePasswordScreen from "../screens/auth/SignUp/CreatePassword/CreatePasswordScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -260,6 +262,21 @@ const AppNavigator = () => {
           }}
           name="EnterUsername"
           component={EnterUsernameScreen}
+        />
+
+        <Stack.Screen
+          options={{
+            title: "great! now what's ur email.",
+          }}
+          name="EnterEmail"
+          component={EnterEmailScreen}
+        />
+        <Stack.Screen
+          options={{
+            title: "Lastly, create a password",
+          }}
+          name="CreatePassword"
+          component={CreatePasswordScreen}
         />
 
         <Stack.Screen

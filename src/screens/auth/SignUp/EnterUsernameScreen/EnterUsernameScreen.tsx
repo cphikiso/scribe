@@ -11,9 +11,13 @@ import React, { useState } from "react";
 import { styles } from "./styles";
 import { StatusBar } from "expo-status-bar";
 import { colors } from "../../../../../components/colors";
+import { useRoute } from "@react-navigation/native";
 
 const EnterUsernameScreen = ({ navigation }) => {
   const [username, setUsername] = useState<string>("");
+
+  const { params } = useRoute();
+  const { fullName } = params;
 
   return (
     <ScrollView keyboardShouldPersistTaps={"always"} style={styles.container}>
@@ -55,7 +59,10 @@ const EnterUsernameScreen = ({ navigation }) => {
           disabled={username.length <= 3}
           onPress={() => {
             //   updateFirstName();
-            navigation.navigate("EnterNumber");
+            navigation.navigate("EnterEmail", {
+              username,
+              fullName,
+            });
           }}
           style={[
             styles.nextButton,
