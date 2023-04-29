@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { colors } from "../../../../components/colors/colors";
+import { colors } from "../../../../components/colors";
 
 export const styles = StyleSheet.create({
   container: {
@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
     height: 68,
     alignItems: "center",
     borderBottomWidth: 1,
-    borderBottomColor: colors.offWhiteTwo,
+    borderBottomColor: "rgba(60, 60, 67, 0.19)",
   },
   avatarName: {
     flexDirection: "row",
@@ -25,10 +25,10 @@ export const styles = StyleSheet.create({
   name: {
     fontSize: 16,
     fontFamily: "SFProRoundedBold",
-    color: colors.smoothBlack,
+    color: colors.grey30,
   },
   inviteButton: {
-    borderColor: colors.primaryPink,
+    borderColor: colors.purple,
     borderWidth: 1,
     borderRadius: 44,
     justifyContent: "center",
@@ -38,7 +38,7 @@ export const styles = StyleSheet.create({
   },
 
   inviteText: {
-    color: colors.primaryPink,
+    color: colors.purple,
     fontSize: 14,
     fontFamily: "SFProRoundedBold",
   },
