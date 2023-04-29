@@ -240,6 +240,14 @@ const AppNavigator = () => {
       <Stack.Group
         screenOptions={{
           presentation: "formSheet",
+          headerShown: true,
+          headerTitleStyle: {
+            fontSize: 18,
+            fontFamily: "SFProRoundedHeavy",
+            color: colors.purple,
+          },
+
+          headerShadowVisible: false,
         }}
       >
         <Stack.Screen name="Contacts" component={ContactsListScreen} />

@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   initials: {
-    color: colors.grey30,
+    color: colors.purple,
     fontSize: 16,
-    fontFamily: "SFProRoundedBold",
+    fontFamily: "SFProRoundedHeavy",
   },
 });

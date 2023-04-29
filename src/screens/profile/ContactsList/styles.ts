@@ -6,7 +6,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     paddingHorizontal: 16,
-    paddingTop: 148,
   },
 
   contact: {
@@ -25,7 +24,7 @@ export const styles = StyleSheet.create({
   name: {
     fontSize: 16,
     fontFamily: "SFProRoundedBold",
-    color: colors.grey30,
+    color: "#000",
   },
   inviteButton: {
     borderColor: colors.purple,
@@ -40,6 +39,6 @@ export const styles = StyleSheet.create({
   inviteText: {
     color: colors.purple,
     fontSize: 14,
-    fontFamily: "SFProRoundedBold",
+    fontFamily: "SFProRoundedHeavy",
   },
 });
