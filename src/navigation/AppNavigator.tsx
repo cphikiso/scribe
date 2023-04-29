@@ -17,6 +17,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import CreatePostScreen from "../screens/home/PostCreation/CreatePostScreen/CreatePostScreen";
 import { useNavigation } from "@react-navigation/core";
 import TranscriptionDoneScreen from "../screens/home/PostCreation/TransciptionDoneScreen/TranscriptionDoneScreen";
+import ContactsListScreen from "../screens/profile/ContactsList/ContactsListScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -234,6 +235,14 @@ const AppNavigator = () => {
           name="Transcribe"
           component={TranscriptionDoneScreen}
         />
+      </Stack.Group>
+
+      <Stack.Group
+        screenOptions={{
+          presentation: "formSheet",
+        }}
+      >
+        <Stack.Screen name="Contacts" component={ContactsListScreen} />
       </Stack.Group>
     </Stack.Navigator>
   );
