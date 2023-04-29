@@ -11,13 +11,18 @@ import {
   Animated,
   TouchableWithoutFeedback,
   Image,
+  Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { styles } from "./styles";
 import { StatusBar } from "expo-status-bar";
 import { colors } from "../../../../../components/colors";
 import { CountryItem, countryCodes } from "../../../../../components/Countries";
 import { FadeInRight, SlideOutRight } from "react-native-reanimated";
+import useAuth from "../../../../hooks/useAuth";
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { auth } from "../../../../../firebaseConfig";
+import firebase from "firebase/compat/app";
 
 const EnterPhoneNumberScreen = ({ navigation }) => {
   const [phoneNumber, setPhoneNumber] = useState<string>("");
@@ -28,9 +33,56 @@ const EnterPhoneNumberScreen = ({ navigation }) => {
   const [codeNumber, setCodeNumber] = useState<string>("");
   const [confirmModal, setConfirmModal] = useState<boolean>(false);
 
+  const [verificationId, setVerificationId] = useState(null);
+  const [confirmationCode, setConfirmationCode] = useState("");
+
+  const recaptchaVerifierObject = new RecaptchaVerifier(
+    "recaptcha-container",
+    {
+      size: "invisible",
+      callback: (response) => {
+        // reCAPTCHA solved, allow signInWithPhoneNumber.
+        console.log("response", response);
+        // onSignInSubmit();
+      },
+    },
+    auth
+  );
+
+  const appVerifier = new firebase.auth.RecaptchaVerifier(
+    "recaptcha-container"
+  );
+
+  // const recaptchaVerifier = useRef(null);
+
+  // const sendVerification = async () => {
+  //   const phoneProvider = new firebase.auth.PhoneAuthProvider();
+  //   phoneProvider
+  //     .verifyPhoneNumber(codeNumber, recaptchaVerifier.current)
+  //     .then(setVerificationId);
+  //   console.log("verificationId", verificationId);
+  //   setCodeNumber("");
+  // };
+
+  // const confirmCodeFunction = async () => {
+  //   const credential = firebase.auth.PhoneAuthProvider.credential(
+  //     verificationId,
+  //     confirmationCode
+  //   );
+  //   firebase.auth().signInWithCredential(credential);
+  //   setConfirmationCode("");
+  //   Alert.alert("Phone authentication successful 👍");
+  // };
+
+  // const { phoneSignUp } = useAuth();
+
   return (
     <ScrollView keyboardShouldPersistTaps={"always"} style={styles.container}>
       <StatusBar style="light" />
+      {/* <FirebaseRecaptchaVerifierModal
+        ref={recaptchaVerifier}
+        firebaseConfig={app}
+      /> */}
 
       <Modal style={{ flex: 1 }} transparent={true} visible={showCountryPicker}>
         <FlatList
@@ -119,7 +171,18 @@ const EnterPhoneNumberScreen = ({ navigation }) => {
                 <Text style={{ color: colors.purple }}>{codeNumber}</Text>
               </Text>
             </View>
-            <TouchableOpacity onPress={() => {}} style={styles.modalButton}>
+            <TouchableOpacity
+              onPress={() => {
+                signInWithPhoneNumber(auth, codeNumber, appVerifier)
+                  .then((confirmationResult) => {
+                    setConfirmationCode(confirmationResult);
+                  })
+                  .catch((error) => {
+                    console.log("signInError", error);
+                  });
+              }} //; navigation.navigate("EnterCodeScreen");
+              style={styles.modalButton}
+            >
               <Text style={[styles.buttonText, { color: "#FFF" }]}>okay</Text>
             </TouchableOpacity>
           </View>
