@@ -22,7 +22,6 @@ interface PostItemProps {
 }
 
 const PostItem = ({ post }: PostItemProps) => {
-  console.log("post", post);
   return (
     <View style={styles.container}>
       <View style={styles.outerFlexRow}>

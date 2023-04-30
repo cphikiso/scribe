@@ -4,9 +4,14 @@ import { Text, View, Image, TouchableOpacity, FlatList } from "react-native";
 import { styles } from "./styles";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import PostItem from "../../../../components/PostItem";
+import useAuth from "../../../hooks/useAuth";
 
 const ProfileScreen = () => {
   const insets = useSafeAreaInsets();
+
+  const { user, currentUser } = useAuth();
+
+  console.log("user", user, "cureent user", currentUser, "current user");
 
   return (
     <View style={styles.container}>
@@ -21,7 +26,7 @@ const ProfileScreen = () => {
                 style={styles.profilePic}
               />
               <View style={styles.nameBio}>
-                <Text style={styles.name}>Chimwemwe</Text>
+                <Text style={styles.name}>{currentUser.fullName}</Text>
                 <Text style={styles.bio}>a lil bio about me ...</Text>
               </View>
             </View>

@@ -12,8 +12,13 @@ import {
 } from "react-native";
 import { styles } from "./styles";
 import PostItem from "../../../../components/PostItem";
+import useAuth from "../../../hooks/useAuth";
 
 const HomeScreen = () => {
+  const { user, currentUser } = useAuth();
+
+  console.log("user", user, "cureent user", currentUser, "current user");
+
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
