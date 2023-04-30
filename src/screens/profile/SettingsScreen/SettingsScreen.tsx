@@ -6,7 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../../../components/colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-const SettingsScreen = () => {
+const SettingsScreen = ({ navigation }) => {
   const { currentUser } = useAuth();
 
   const insets = useSafeAreaInsets();
@@ -20,6 +20,7 @@ const SettingsScreen = () => {
       style={styles.container}
     >
       <TouchableOpacity
+        onPress={() => navigation.navigate("EditProfile")}
         style={{
           flexDirection: "row",
           paddingVertical: 16,
@@ -66,7 +67,7 @@ const SettingsScreen = () => {
         <Ionicons
           name="chevron-forward"
           size={24}
-          color="rgba(60,60,67, 0.6)"
+          color="rgba(118,118,128, 0.60)"
         />
       </TouchableOpacity>
 

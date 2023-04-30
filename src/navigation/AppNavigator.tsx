@@ -27,6 +27,7 @@ import EnterEmailScreen from "../screens/auth/SignUp/EnterEmail/EnterEmailScreen
 import CreatePasswordScreen from "../screens/auth/SignUp/CreatePassword/CreatePasswordScreen";
 import useAuth from "../hooks/useAuth";
 import SettingsScreen from "../screens/profile/SettingsScreen/SettingsScreen";
+import EditProfileScreen from "../screens/profile/EditProfile/EditProfileScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -224,9 +225,8 @@ const AppNavigator = () => {
       {user ? (
         <>
           <Stack.Screen name="TabStack" component={TabNavigator} />
-
-          <Stack.Screen
-            options={{
+          <Stack.Group
+            screenOptions={{
               headerShown: true,
               headerTitleStyle: {
                 fontSize: 18,
@@ -236,9 +236,10 @@ const AppNavigator = () => {
               headerShadowVisible: false,
               headerTintColor: colors.purple,
             }}
-            name="Settings"
-            component={SettingsScreen}
-          />
+          >
+            <Stack.Screen name="Settings" component={SettingsScreen} />
+            <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+          </Stack.Group>
           <Stack.Group screenOptions={{ presentation: "transparentModal" }}>
             <Stack.Screen name="CreatePost" component={CreatePostScreen} />
             <Stack.Screen
