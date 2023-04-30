@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
     width: "100%",
   },
   bottomSheet: {
-    flex: 3,
+    flex: 1.28,
     marginBottom: 32,
     borderRadius: 44,
     backgroundColor: colors.purple,
@@ -35,7 +35,7 @@ export const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
     marginTop: 16,
-    marginBottom: 44,
+    marginBottom: 28,
   },
   cancel: {
     right: -8,
@@ -56,6 +56,14 @@ export const styles = StyleSheet.create({
     fontFamily: "SFProRoundedBold",
     color: "rgba(255,255,255,0.6)",
     textAlign: "center",
+  },
+
+  largeTimerText: {
+    fontFamily: "SFProRoundedBold",
+    textAlign: "center",
+    fontSize: 38,
+    color: "white",
+    marginBottom: 8,
   },
   modalHeader: {
     fontSize: 20,
@@ -79,5 +87,5 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: "SFProRoundedHeavy",
   },
-  waveForm: { paddingHorizontal: 16, height: 160 },
+  waveForm: { paddingHorizontal: 16, height: 120 },
 });

@@ -112,27 +112,9 @@ const CreatePostScreen = ({ navigation }) => {
               />
             </TouchableOpacity>
           </View>
-          <Text
-            style={[styles.timerText, !recording && { color: colors.purple }]}
-          >{`00:04.59`}</Text>
-          <View style={styles.waveForm}>
-            {recordingProcess ? (
-              <Lottie
-                source={require("../../../../../assets/soundwaves.json")}
-                autoPlay
-                loop
-              />
-            ) : (
-              <Text
-                style={[
-                  styles.timerText,
-                  { fontSize: 38, top: 50, color: "white" },
-                ]}
-              >
-                00:04.59
-              </Text>
-            )}
-          </View>
+
+          <Text style={styles.largeTimerText}>00:04.59</Text>
+
           {recordingProcess ? (
             <TouchableOpacity
               onPress={() => {
