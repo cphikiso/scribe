@@ -25,6 +25,7 @@ import ConfirmationCodeScreen from "../screens/auth/SignUp/ConfirmationCodeScree
 import EnterEmailScreen from "../screens/auth/SignUp/EnterEmail/EnterEmailScreen";
 import CreatePasswordScreen from "../screens/auth/SignUp/CreatePassword/CreatePasswordScreen";
 import useAuth from "../hooks/useAuth";
+import SettingsScreen from "../screens/profile/SettingsScreen/SettingsScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -81,6 +82,8 @@ const TopTabs = () => {
 };
 
 const TabNavigator = () => {
+  const navigation = useNavigation();
+
   const { user, currentUser } = useAuth();
   return (
     <Tab.Navigator
@@ -163,6 +166,7 @@ const TabNavigator = () => {
           headerLeft: () => null,
           headerRight: () => (
             <TouchableOpacity
+              onPress={() => navigation.navigate("Settings")}
               style={{
                 flexDirection: "row",
                 alignItems: "center",
@@ -219,6 +223,21 @@ const AppNavigator = () => {
       {user ? (
         <>
           <Stack.Screen name="TabStack" component={TabNavigator} />
+
+          <Stack.Screen
+            options={{
+              headerShown: true,
+              headerTitleStyle: {
+                fontSize: 18,
+                fontFamily: "SFProRoundedHeavy",
+                color: colors.purple,
+              },
+              headerShadowVisible: false,
+              headerTintColor: colors.purple,
+            }}
+            name="Settings"
+            component={SettingsScreen}
+          />
           <Stack.Group screenOptions={{ presentation: "transparentModal" }}>
             <Stack.Screen name="CreatePost" component={CreatePostScreen} />
             <Stack.Screen
