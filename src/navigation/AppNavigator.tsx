@@ -269,6 +269,20 @@ const AppNavigator = () => {
               component={TranscriptionDoneScreen}
             />
           </Stack.Group>
+          <Stack.Group
+            screenOptions={{
+              headerShown: true,
+              presentation: "formSheet",
+              headerTitleStyle: {
+                fontSize: 18,
+                fontFamily: "SFProRoundedHeavy",
+                color: colors.purple,
+              },
+              headerShadowVisible: false,
+            }}
+          >
+            <Stack.Screen name="Contacts" component={ContactsListScreen} />
+          </Stack.Group>
         </>
       ) : (
         <>
