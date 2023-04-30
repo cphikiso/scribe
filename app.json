@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "scribe",
+    "name": "Scribe",
     "slug": "scribe",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -13,13 +13,22 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.scribe.www",
+      "buildNumber": "6",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -37,6 +46,11 @@
           "contactsPermission": "Scribe accesses your contacts to let you invite friends from university."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "7a054dcf-d46d-4fe0-a7e0-a50641d439eb"
+      }
+    }
   }
 }

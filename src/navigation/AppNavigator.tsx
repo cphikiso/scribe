@@ -18,6 +18,15 @@ import CreatePostScreen from "../screens/home/PostCreation/CreatePostScreen/Crea
 import { useNavigation } from "@react-navigation/core";
 import TranscriptionDoneScreen from "../screens/home/PostCreation/TransciptionDoneScreen/TranscriptionDoneScreen";
 import ContactsListScreen from "../screens/profile/ContactsList/ContactsListScreen";
+import LandingScreen from "../screens/auth/LandingScreen/LandingScreen";
+import EnterNameScreen from "../screens/auth/SignUp/EnterNameScreen/EnterNameScreen";
+import EnterUsernameScreen from "../screens/auth/SignUp/EnterUsernameScreen/EnterUsernameScreen";
+import EnterPhoneNumberScreen from "../screens/auth/SignUp/EnterPhoneNumberScreen/EnterPhoneNumberScreen";
+import ConfirmationCodeScreen from "../screens/auth/SignUp/ConfirmationCodeScreen/ConfirmationCodeScreen";
+import EnterEmailScreen from "../screens/auth/SignUp/EnterEmail/EnterEmailScreen";
+import CreatePasswordScreen from "../screens/auth/SignUp/CreatePassword/CreatePasswordScreen";
+import useAuth from "../hooks/useAuth";
+import SettingsScreen from "../screens/profile/SettingsScreen/SettingsScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -74,6 +83,9 @@ const TopTabs = () => {
 };
 
 const TabNavigator = () => {
+  const navigation = useNavigation();
+
+  const { user, currentUser } = useAuth();
   return (
     <Tab.Navigator
       screenOptions={{
@@ -149,12 +161,13 @@ const TabNavigator = () => {
                 color: colors.purple,
               }}
             >
-              @phikiso
+              @{currentUser?.username || user?.fullName}
             </Text>
           ),
           headerLeft: () => null,
           headerRight: () => (
             <TouchableOpacity
+              onPress={() => navigation.navigate("Settings")}
               style={{
                 flexDirection: "row",
                 alignItems: "center",
@@ -198,6 +211,9 @@ const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
   const navigation = useNavigation();
+  const { user, currentUser } = useAuth();
+
+  console.log("user", user, "current", currentUser);
 
   return (
     <Stack.Navigator
@@ -205,53 +221,143 @@ const AppNavigator = () => {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="TabStack" component={TabNavigator} />
-      <Stack.Group screenOptions={{ presentation: "transparentModal" }}>
-        <Stack.Screen name="CreatePost" component={CreatePostScreen} />
-        <Stack.Screen
-          options={{
-            headerShown: true,
-            headerStyle: { backgroundColor: colors.purple },
-            headerShadowVisible: false,
-            headerTitle: " ",
-            headerRight: () => (
-              <TouchableOpacity
-                style={{
-                  height: 36,
-                  width: 36,
-                  borderRadius: 36,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-                onPress={() => navigation.goBack()}
-              >
-                <Image
-                  source={require("../../assets/appIcons/close.png")}
-                  style={{ height: 36, width: 36 }}
-                />
-              </TouchableOpacity>
-            ),
-          }}
-          name="Transcribe"
-          component={TranscriptionDoneScreen}
-        />
-      </Stack.Group>
+      {user ? (
+        <>
+          <Stack.Screen name="TabStack" component={TabNavigator} />
 
-      <Stack.Group
-        screenOptions={{
-          presentation: "formSheet",
-          headerShown: true,
-          headerTitleStyle: {
-            fontSize: 18,
-            fontFamily: "SFProRoundedHeavy",
-            color: colors.purple,
-          },
+          <Stack.Screen
+            options={{
+              headerShown: true,
+              headerTitleStyle: {
+                fontSize: 18,
+                fontFamily: "SFProRoundedHeavy",
+                color: colors.purple,
+              },
+              headerShadowVisible: false,
+              headerTintColor: colors.purple,
+            }}
+            name="Settings"
+            component={SettingsScreen}
+          />
+          <Stack.Group screenOptions={{ presentation: "transparentModal" }}>
+            <Stack.Screen name="CreatePost" component={CreatePostScreen} />
+            <Stack.Screen
+              options={{
+                headerShown: true,
+                headerStyle: { backgroundColor: colors.purple },
+                headerShadowVisible: false,
+                headerTitle: " ",
+                headerRight: () => (
+                  <TouchableOpacity
+                    style={{
+                      height: 36,
+                      width: 36,
+                      borderRadius: 36,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                    onPress={() => navigation.goBack()}
+                  >
+                    <Image
+                      source={require("../../assets/appIcons/close.png")}
+                      style={{ height: 36, width: 36 }}
+                    />
+                  </TouchableOpacity>
+                ),
+              }}
+              name="Transcribe"
+              component={TranscriptionDoneScreen}
+            />
+          </Stack.Group>
+        </>
+      ) : (
+        <>
+          {/* AUTH */}
+          <Stack.Group>
+            <Stack.Screen name="Landing" component={LandingScreen} />
+          </Stack.Group>
+          {/* sign up flow */}
+          <Stack.Group
+            screenOptions={{
+              headerShown: true,
+              headerBackVisible: false,
+              headerShadowVisible: false,
+              // headerTitle: () => null,
+              headerTitleStyle: {
+                color: "#fff",
+                fontFamily: "SFProRoundedBold",
+                fontSize: 22,
+              },
+              headerStyle: { backgroundColor: colors.purple },
+              headerLargeStyle: { backgroundColor: colors.purple },
+              headerLargeTitle: true,
+              headerLargeTitleStyle: {
+                fontFamily: "SFProRoundedBold",
+                fontSize: 28,
+                color: "#fff",
+              },
+              headerLeft: ({}) => (
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <Image
+                    style={{
+                      width: 28,
+                      height: 28,
+                    }}
+                    source={require("../../assets/appIcons/carretLeftLargeWhite.png")}
+                  />
+                </TouchableOpacity>
+              ),
+            }}
+          >
+            <Stack.Screen
+              options={{
+                title: "hi! what's your name?",
+              }}
+              name="EnterName"
+              component={EnterNameScreen}
+            />
 
-          headerShadowVisible: false,
-        }}
-      >
-        <Stack.Screen name="Contacts" component={ContactsListScreen} />
-      </Stack.Group>
+            <Stack.Screen
+              options={{
+                title: "next, create your @ name.",
+              }}
+              name="EnterUsername"
+              component={EnterUsernameScreen}
+            />
+
+            <Stack.Screen
+              options={{
+                title: "great! now what's ur email.",
+              }}
+              name="EnterEmail"
+              component={EnterEmailScreen}
+            />
+            <Stack.Screen
+              options={{
+                title: "Lastly, create a password",
+              }}
+              name="CreatePassword"
+              component={CreatePasswordScreen}
+            />
+
+            <Stack.Screen
+              options={{
+                title: "great! now just ur number.",
+              }}
+              name="EnterNumber"
+              component={EnterPhoneNumberScreen}
+            />
+
+            <Stack.Screen
+              options={{
+                title: "please enter the code we sent you.",
+              }}
+              name="ConfirmationCode"
+              component={ConfirmationCodeScreen}
+            />
+          </Stack.Group>
+        </>
+      )}
     </Stack.Navigator>
   );
 };
