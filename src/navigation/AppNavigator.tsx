@@ -81,6 +81,7 @@ const TopTabs = () => {
 };
 
 const TabNavigator = () => {
+  const { user, currentUser } = useAuth();
   return (
     <Tab.Navigator
       screenOptions={{
@@ -156,7 +157,7 @@ const TabNavigator = () => {
                 color: colors.purple,
               }}
             >
-              @phikiso
+              @{currentUser?.username || user?.fullName}
             </Text>
           ),
           headerLeft: () => null,
@@ -207,7 +208,7 @@ const AppNavigator = () => {
   const navigation = useNavigation();
   const { user, currentUser } = useAuth();
 
-  console.log("user", user);
+  console.log("user", user, "current", currentUser);
 
   return (
     <Stack.Navigator

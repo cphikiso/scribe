@@ -111,34 +111,6 @@ export const AuthProvider = ({ children }) => {
       });
   };
 
-  //   const phoneSignUp = (phoneNumber) => {
-  //     const recaptchaVerifier = new RecaptchaVerifier(
-  //       "recaptcha-container",
-  //       {
-  //         size: "invisible",
-  //         callback: (response) => {
-  //           // reCAPTCHA solved, allow signInWithPhoneNumber.
-  //           console.log("response", response);
-  //         },
-  //       },
-  //       auth
-  //     );
-  //     recaptchaVerifier;
-  //     // const appVerifier = recaptchaVerifier;
-  //     // const provider = new PhoneAuthProvider(auth);
-  //     // provider
-  //     //   .verifyPhoneNumber(phoneNumber, appVerifier)
-  //     //   .then((verificationId) => {
-  //     //     // store verificationId in state
-  //     //     console.log("verification ID", verificationId);
-  //     //   })
-  //     //   .catch((error) => {
-  //     //     console.log(error);
-  //     //   });
-  //   };
-
-  //   const phoneSignUp = () => {};
-
   const signUp = async (
     email: string,
     password: string,
@@ -169,7 +141,6 @@ export const AuthProvider = ({ children }) => {
         // setUser(authenticatedUser.user);
       });
       await sendEmailVerification(newUserCredential.user).then(() => {
-        console.log("new user", newUserCredential.user);
         setUser(newUserCredential.user);
       });
 
