@@ -17,6 +17,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import CreatePostScreen from "../screens/home/PostCreation/CreatePostScreen/CreatePostScreen";
 import { useNavigation } from "@react-navigation/core";
 import TranscriptionDoneScreen from "../screens/home/PostCreation/TransciptionDoneScreen/TranscriptionDoneScreen";
+import ContactsListScreen from "../screens/profile/ContactsList/ContactsListScreen";
 import LandingScreen from "../screens/auth/LandingScreen/LandingScreen";
 import EnterNameScreen from "../screens/auth/SignUp/EnterNameScreen/EnterNameScreen";
 import EnterUsernameScreen from "../screens/auth/SignUp/EnterUsernameScreen/EnterUsernameScreen";
@@ -267,6 +268,20 @@ const AppNavigator = () => {
               name="Transcribe"
               component={TranscriptionDoneScreen}
             />
+          </Stack.Group>
+          <Stack.Group
+            screenOptions={{
+              headerShown: true,
+              presentation: "formSheet",
+              headerTitleStyle: {
+                fontSize: 18,
+                fontFamily: "SFProRoundedHeavy",
+                color: colors.purple,
+              },
+              headerShadowVisible: false,
+            }}
+          >
+            <Stack.Screen name="Contacts" component={ContactsListScreen} />
           </Stack.Group>
         </>
       ) : (

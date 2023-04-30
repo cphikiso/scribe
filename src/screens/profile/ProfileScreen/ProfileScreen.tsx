@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import PostItem from "../../../../components/PostItem";
 import useAuth from "../../../hooks/useAuth";
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
   const insets = useSafeAreaInsets();
 
   const { user, currentUser } = useAuth();
@@ -47,7 +47,10 @@ const ProfileScreen = () => {
               </TouchableOpacity>
             </View>
             <View style={styles.inviteBorder} />
-            <TouchableOpacity style={styles.inviteButton}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Contacts")}
+              style={styles.inviteButton}
+            >
               <Text style={styles.inviteText}>Invite friends</Text>
             </TouchableOpacity>
             <View style={styles.inviteBorder} />

@@ -39,6 +39,12 @@
         {
           "microphonePermissions": "For you to make a post on Scribe, we need to access your microphone to record your audio."
         }
+      ],
+      [
+        "expo-contacts",
+        {
+          "contactsPermission": "Scribe accesses your contacts to let you invite friends from university."
+        }
       ]
     ],
     "extra": {
