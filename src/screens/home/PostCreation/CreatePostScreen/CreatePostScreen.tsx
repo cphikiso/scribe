@@ -261,10 +261,10 @@ const CreatePostScreen = ({ navigation }) => {
                 <TouchableOpacity
                   onPress={() => {
                     setUploadAudio(true);
-                    // navigation.navigate("Transcribe", {
-                    //   audioURI,
-                    //   audioDuration: recordingDuration,
-                    // });
+                    navigation.navigate("Transcribe", {
+                      audioURI,
+                      audioDuration: recordingDuration,
+                    });
                   }}
                   style={styles.modalButton}
                 >
