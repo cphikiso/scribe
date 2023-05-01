@@ -1,4 +1,10 @@
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import {
   Gesture,
@@ -26,6 +32,7 @@ const CreatePostScreen = ({ navigation }) => {
   const [recordingProcess, setRecordingProcess] = useState(true);
   const [listening, setListening] = useState(false);
   const [uploadAudio, setUploadAudio] = useState(false);
+  const [audioURI, setAudioURI] = useState(null);
 
   const [recordingDuration, setRecordingDuration] = useState(null);
 
@@ -75,12 +82,43 @@ const CreatePostScreen = ({ navigation }) => {
 
     const status = recording;
     const uri = recording.getURI();
+    setAudioURI(uri);
     console.log(
       "Recording stopped and stored at",
       uri,
       "status ON STOP",
       status
     );
+  }
+
+  let sound; // Declare sound variable in the outer scope
+
+  async function playSound() {
+    console.log("Loading Sound");
+    const { sound: newSound } = await Audio.Sound.createAsync(
+      { uri: audioURI },
+      { shouldPlay: true }
+    );
+    sound = newSound; // Assign the sound object to the outer scope variable
+    console.log("Playing Sound", sound);
+
+    sound.setOnPlaybackStatusUpdate((status) => {
+      if (!status.isPlaying && status.didJustFinish) {
+        setListening(false);
+        console.log("Sound stopped");
+      }
+    });
+
+    await sound.playAsync();
+  }
+
+  function stopSound() {
+    console.log("Stopping Sound");
+    if (sound) {
+      sound.stopAsync();
+    } else {
+      console.log("Sound not loaded yet");
+    }
   }
   {
     /* 
@@ -118,7 +156,8 @@ const CreatePostScreen = ({ navigation }) => {
     const minutes = millis / 1000 / 60;
     const minutesDisplay = Math.floor(minutes);
     const seconds = (minutes - minutesDisplay) * 60;
-    const secondsDisplay = seconds < 10 ? `0${seconds}` : seconds;
+    const secondsDisplay =
+      seconds < 10 ? `0${seconds.toFixed(2)}` : seconds.toFixed(2);
     return `${minutesDisplay}:${secondsDisplay}`;
   }
 
@@ -157,60 +196,83 @@ const CreatePostScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        <Animated.Text style={styles.largeTimerText}>
-          {recordingDuration ? recordingDuration : "00:00"}
-        </Animated.Text>
-
-        {recordingProcess ? (
-          <TouchableOpacity
-            onPress={() => {
-              setListening(false);
-              setRecordingProcess(false);
-              stopRecording();
-            }}
-            style={{ alignSelf: "center" }}
-          >
-            <Ionicons name="ios-stop-circle-outline" size={68} color="white" />
-          </TouchableOpacity>
+        {uploadAudio ? (
+          <View style={{ paddingTop: 16 }}>
+            <ActivityIndicator size={"large"} color={"#FFF"} />
+            <Text
+              style={[styles.largeTimerText, { fontSize: 18, paddingTop: 28 }]}
+            >
+              processing ...
+            </Text>
+          </View>
         ) : (
           <>
-            <View>
-              {!listening ? (
-                <TouchableOpacity
-                  onPress={() => setListening(true)}
-                  style={styles.playbackIconContainer}
-                >
-                  <Ionicons
-                    name="ios-play-circle-outline"
-                    size={68}
-                    color="white"
-                  />
-                </TouchableOpacity>
-              ) : (
+            <Animated.Text style={styles.largeTimerText}>
+              {recordingDuration ? recordingDuration : "00:00:00"}
+            </Animated.Text>
+            {recordingProcess ? (
+              <TouchableOpacity
+                onPress={() => {
+                  setListening(false);
+                  setRecordingProcess(false);
+                  stopRecording();
+                }}
+                style={{ alignSelf: "center" }}
+              >
+                <Ionicons
+                  name="ios-stop-circle-outline"
+                  size={68}
+                  color="white"
+                />
+              </TouchableOpacity>
+            ) : (
+              <>
+                <View>
+                  {!listening ? (
+                    <TouchableOpacity
+                      onPress={() => {
+                        playSound();
+                        setListening(true);
+                      }}
+                      style={styles.playbackIconContainer}
+                    >
+                      <Ionicons
+                        name="ios-play-circle-outline"
+                        size={68}
+                        color="white"
+                      />
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      onPress={() => {
+                        stopSound();
+                        setListening(false);
+                      }}
+                      style={styles.playbackIconContainer}
+                    >
+                      <Ionicons
+                        name="ios-pause-circle-outline"
+                        size={68}
+                        color="white"
+                      />
+                    </TouchableOpacity>
+                  )}
+                </View>
                 <TouchableOpacity
                   onPress={() => {
-                    setListening(false);
+                    setUploadAudio(true);
+                    // navigation.navigate("Transcribe", {
+                    //   audioURI,
+                    //   audioDuration: recordingDuration,
+                    // });
                   }}
-                  style={styles.playbackIconContainer}
+                  style={styles.modalButton}
                 >
-                  <Ionicons
-                    name="ios-pause-circle-outline"
-                    size={68}
-                    color="white"
-                  />
+                  <Text style={styles.buttonText}>Transcribe</Text>
+                  {/* Start scribing */}
                 </TouchableOpacity>
-              )}
-            </View>
-            <TouchableOpacity
-              onPress={() => {
-                setUploadAudio(true);
-                navigation.navigate("Transcribe");
-              }}
-              style={styles.modalButton}
-            >
-              <Text style={styles.buttonText}>Transcribe</Text>
-              {/* Start scribing */}
-            </TouchableOpacity>
+              </>
+            )}
           </>
         )}
       </Animated.View>
