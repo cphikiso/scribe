@@ -257,7 +257,7 @@ const AppNavigator = () => {
                       justifyContent: "center",
                       alignItems: "center",
                     }}
-                    onPress={() => navigation.goBack()}
+                    onPress={() => navigation.navigate("TabStack")}
                   >
                     <Image
                       source={require("../../assets/appIcons/close.png")}

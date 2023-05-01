@@ -142,6 +142,7 @@ export const AuthProvider = ({ children }) => {
       });
       await sendEmailVerification(newUserCredential.user).then(() => {
         setUser(newUserCredential.user);
+        storeUserCredentials(newUserCredential.user);
       });
 
       return newUserCredential;
