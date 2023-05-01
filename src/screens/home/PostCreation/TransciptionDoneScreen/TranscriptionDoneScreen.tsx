@@ -11,6 +11,7 @@ import { styles } from "./styles";
 import Animated, { FadeIn } from "react-native-reanimated";
 import { useRoute } from "@react-navigation/native";
 import { Audio } from "expo-av";
+import { StatusBar } from "expo-status-bar";
 
 const TranscriptionDoneScreen = ({ navigation }) => {
   const [playing, setPlaying] = useState(false);
@@ -54,6 +55,7 @@ const TranscriptionDoneScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar style="light" />
       <View>
         <View style={styles.audioPlayerRow}>
           <TouchableOpacity
