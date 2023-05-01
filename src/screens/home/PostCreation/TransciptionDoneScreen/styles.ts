@@ -7,6 +7,27 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.purple,
     paddingHorizontal: 16,
   },
+  audioPlayerRow: {
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 28,
+  },
+  playButton: {
+    height: 52,
+    width: 52,
+    borderRadius: 52,
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  lottieWave: {
+    height: 80,
+    justifyContent: "center",
+    alignItems: "center",
+
+    width: "60%",
+  },
   timerText: {
     fontSize: 18,
     fontFamily: "SFProRoundedBold",

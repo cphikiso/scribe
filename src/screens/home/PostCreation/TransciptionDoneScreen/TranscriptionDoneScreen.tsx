@@ -1,33 +1,67 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import React, { useState } from "react";
 import Lottie from "lottie-react-native";
 import { styles } from "./styles";
 import Animated, { FadeIn } from "react-native-reanimated";
+import { useRoute } from "@react-navigation/native";
+import { Audio } from "expo-av";
 
 const TranscriptionDoneScreen = ({ navigation }) => {
   const [playing, setPlaying] = useState(false);
+  const [transcribing, setTranscribing] = useState(true);
+  const [listening, setListening] = useState(false);
+
+  const { audioURI, audioDuration } = useRoute().params;
+
+  console.log(audioURI, audioDuration);
+
+  let sound; // Declare sound variable in the outer scope
+
+  async function playSound() {
+    console.log("Loading Sound");
+    const { sound: newSound } = await Audio.Sound.createAsync(
+      { uri: audioURI },
+      { shouldPlay: true }
+    );
+    sound = newSound;
+    console.log("Playing Sound", sound);
+
+    sound.setOnPlaybackStatusUpdate((status) => {
+      if (!status.isPlaying && status.didJustFinish) {
+        setListening(false);
+        setPlaying(false);
+        console.log("Sound stopped");
+      }
+    });
+
+    await sound.playAsync();
+  }
+
+  function stopSound() {
+    console.log("Stopping Sound");
+    if (sound) {
+      sound.stopAsync();
+    } else {
+      console.log("Sound not loaded yet");
+    }
+  }
 
   return (
     <View style={styles.container}>
       <View>
-        <View
-          style={{
-            justifyContent: "space-between",
-            flexDirection: "row",
-            alignItems: "center",
-            marginBottom: 28,
-          }}
-        >
+        <View style={styles.audioPlayerRow}>
           <TouchableOpacity
-            style={{
-              height: 52,
-              width: 52,
-              borderRadius: 52,
-              backgroundColor: "rgba(255, 255, 255, 0.2)",
-              justifyContent: "center",
-              alignItems: "center",
+            style={styles.playButton}
+            onPress={() => {
+              setPlaying(!playing);
+              playing ? stopSound() : playSound();
             }}
-            onPress={() => setPlaying(!playing)}
           >
             {!playing ? (
               <Animated.Image
@@ -43,28 +77,29 @@ const TranscriptionDoneScreen = ({ navigation }) => {
               />
             )}
           </TouchableOpacity>
-          <View
-            style={{
-              height: 80,
-              justifyContent: "center",
-              alignItems: "center",
-
-              width: "60%",
-            }}
-          >
+          <View style={styles.lottieWave}>
             <Lottie
               source={require("../../../../../assets/soundwaves.json")}
               autoPlay={false}
               loop
             />
           </View>
-          <Text style={styles.timerText}>{`00:04.59`}</Text>
+          <Text style={styles.timerText}>{audioDuration}</Text>
         </View>
-        <Text style={styles.bodyText}>
-          these aren’t just random questions. they reveal (and motivate) some
-          key design decisions. for each of these, what do you *want* the answer
-          to be, and why? what is the “price” of your chosen answer?
-        </Text>
+        {transcribing ? (
+          <View>
+            <ActivityIndicator size={"large"} color="#FFF" />
+            <Text style={[styles.timerText, { paddingTop: 18 }]}>
+              Transcribing ...
+            </Text>
+          </View>
+        ) : (
+          <Text style={styles.bodyText}>
+            these aren’t just random questions. they reveal (and motivate) some
+            key design decisions. for each of these, what do you *want* the
+            answer to be, and why? what is the “price” of your chosen answer?
+          </Text>
+        )}
       </View>
       <TouchableOpacity
         onPress={() => {
