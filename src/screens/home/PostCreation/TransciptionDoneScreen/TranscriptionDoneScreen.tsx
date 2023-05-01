@@ -4,6 +4,7 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import Lottie from "lottie-react-native";
@@ -23,15 +24,45 @@ const TranscriptionDoneScreen = ({ navigation }) => {
   console.log(audioURI, audioDuration);
 
   let sound; // Declare sound variable in the outer scope
+  async function callDavinci() {
+    try {
+      const response = await fetch(
+        "https://us-central1-scribe-speak-your-mind.cloudfunctions.net/callDavinci",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.status == 200) {
+        const data = await response.json();
+        console.log("Davinci called successfully", data);
+
+        console.log(
+          "query complete",
+          data,
+          "COMPLETION",
+          data.choices[0].text,
+          "TEXT"
+        );
+      }
+    } catch (error) {
+      Alert.alert(error.message);
+      console.warn(error);
+      console.log("ERROR", error, "ERROR");
+    }
+  }
 
   async function playSound() {
     console.log("Loading Sound");
+    callDavinci();
     const { sound: newSound } = await Audio.Sound.createAsync(
       { uri: audioURI },
       { shouldPlay: true }
     );
     sound = newSound;
-    console.log("Playing Sound", sound);
+    //console.log("Playing Sound", sound);
 
     sound.setOnPlaybackStatusUpdate((status) => {
       if (!status.isPlaying && status.didJustFinish) {
