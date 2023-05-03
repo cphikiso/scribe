@@ -1,17 +1,53 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Text, View, Image, TouchableOpacity, FlatList } from "react-native";
 import { styles } from "./styles";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import PostItem from "../../../../components/PostItem";
 import useAuth from "../../../hooks/useAuth";
+import { getFunctions, httpsCallable } from "firebase/functions";
+import CurrentUserPostItem from "../../../../components/CurrentUserPostItem";
 
 const ProfileScreen = ({ navigation }) => {
   const insets = useSafeAreaInsets();
+  const [posts, setPosts] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const { user, currentUser } = useAuth();
 
   console.log("user", user, "cureent user", currentUser, "current user");
+
+  const functions = getFunctions();
+
+  async function fetchCurrentUserPosts() {
+    try {
+      const uid = currentUser.uid;
+      const getCurrentUserPosts = httpsCallable(
+        functions,
+        "getCurrentUserPosts"
+      );
+      const response = await getCurrentUserPosts({ uid });
+      const userPosts = response.data.userPosts;
+      setPosts(userPosts);
+      console.log("User posts:", userPosts);
+    } catch (error) {
+      console.error("Error fetching current user posts:", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchCurrentUserPosts();
+  }, []);
+
+  async function fetchNewPosts() {
+    await fetchCurrentUserPosts();
+  }
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await fetchNewPosts();
+    setRefreshing(false);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -57,74 +93,16 @@ const ProfileScreen = ({ navigation }) => {
           </>
         )}
         data={posts}
-        renderItem={(post) => <PostItem post={post} />}
+        renderItem={(post) => <CurrentUserPostItem post={post} />}
         showsVerticalScrollIndicator={false}
+        ListEmptyComponent={() => (
+          <Text style={styles.listEmpty}>Create your first post</Text>
+        )}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
       />
     </View>
   );
 };
 
 export default ProfileScreen;
-
-const posts = [
-  {
-    id: 1,
-    userName: "laflame",
-    name: "Travis Scott",
-    time: "2m",
-    body: "these aren’t just random questions",
-    profilePic: require("../../../../assets/pic.jpg"),
-    audio: "audio.mp3",
-    comments: 10,
-    reposts: 20,
-    likes: 30,
-  },
-  {
-    id: 2,
-    userName: "laflame",
-    name: "Travis Scott",
-    time: "5m",
-    body: "just random",
-    profilePic: require("../../../../assets/pic.jpg"),
-    audio: "audio.mp3",
-    comments: 0,
-    reposts: 0,
-    likes: 1,
-  },
-  {
-    id: 3,
-    userName: "laflame",
-    name: "Travis Scott",
-    time: "30m",
-    body: "these aren’t just random questions. they reveal (and motivate) some key design decisions. for each of these, what do you *want* the answer to be, and why? what is the “price” of your chosen answer?",
-    profilePic: require("../../../../assets/pic.jpg"),
-    audio: "audio.mp3",
-    comments: 10,
-    reposts: 20,
-    likes: 30,
-  },
-  {
-    id: 31,
-    userName: "laflame",
-    name: "Travis Scott",
-    time: "1h",
-    body: "these aren’t just random questions. they reveal (and motivate) some key design decisions. for each of these, what do you *want* the answer to be, and why? what is the “price” of your chosen answer?",
-    profilePic: require("../../../../assets/pic.jpg"),
-    audio: "audio.mp3",
-    comments: 10,
-    reposts: 20,
-    likes: 30,
-  },
-  {
-    id: 41,
-    userName: "laflame",
-    name: "Travis Scott",
-    time: "2h",
-    body: "these aren’t just random questions. they reveal (and motivate) some key design decisions. for each of these, what do you *want* the answer to be, and why? what is the “price” of your chosen answer?",
-    profilePic: require("../../../../assets/pic.jpg"),
-    audio: "audio.mp3",
-    comments: 10,
-    reposts: 20,
-    likes: 30,
-  },
-];

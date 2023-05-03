@@ -44,4 +44,13 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     color: "rgba(60,60,67,0.3)",
   },
+  listEmpty: {
+    color: "rgba(60,60,67,0.12)",
+    textAlign: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    marginTop: 120,
+    fontFamily: "SFProRoundedBold",
+    fontSize: 28,
+  },
 });
