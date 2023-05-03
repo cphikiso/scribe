@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./stylesPostItem";
+import { Audio } from "expo-av";
 
 interface PostItemProps {
   post: {
@@ -12,33 +13,94 @@ interface PostItemProps {
       name: string;
       time: string;
       body: string;
-      profilePic: any;
-      audio: string;
-      comments: number;
+      profilePicture: any;
+      audioURI: string;
+      comments: object[];
+      commentCount: number;
       reposts: number;
-      likes: number;
+      likes: object[];
+      likeCount: number;
     };
   };
 }
 
 const PostItem = ({ post }: PostItemProps) => {
+  const [playing, setPlaying] = useState(false);
+
+  console.log("post is here", post.item.data.audioURI);
+
+  console.log("user is here", post.item.postCreator);
+  let sound;
+  async function playSound() {
+    const { sound: newSound } = await Audio.Sound.createAsync(
+      { uri: post.item.data.audioURI },
+      { shouldPlay: true }
+    );
+    sound = newSound;
+
+    setPlaying(true);
+
+    sound.setOnPlaybackStatusUpdate((status) => {
+      if (!status.isPlaying && status.didJustFinish) {
+        setPlaying(false);
+      }
+    });
+
+    await sound.playAsync();
+  }
+
+  function stopSound() {
+    if (sound) {
+      sound.stopAsync();
+      setPlaying(false);
+    } else {
+      null;
+    }
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.outerFlexRow}>
         <View style={styles.innerFlexRow}>
-          <Image source={post.item.profilePic} style={styles.profilePic} />
+          <Image
+            source={
+              post.item.postCreator.profilePicture ||
+              require("../assets/pic.jpg")
+            }
+            style={styles.profilePic}
+          />
           <View>
             <View style={styles.titleRow}>
-              <Text style={styles.name}>{post.item.name}</Text>
-              <Text style={styles.username}>@{post.item.userName}</Text>
-              <Text style={styles.timeText}>· {post.item.time}</Text>
+              <Text style={styles.name}>
+                {post.item.postCreator.fullName || "NULL"}
+              </Text>
+              <Text style={styles.username}>
+                @{post.item.postCreator.username || "NULL"}
+              </Text>
+              <Text style={styles.timeText}>· {post.item.time || "NULL"}</Text>
             </View>
-            <Text style={styles.bodyText}>{post.item.body}</Text>
+            <Text style={styles.bodyText}>{post.item.data.body || "NULL"}</Text>
           </View>
         </View>
-        <TouchableOpacity style={styles.playAudioButton}>
-          <Ionicons name="ios-play" size={24} color={"rgba(60,60,67,0.6)"} />
-        </TouchableOpacity>
+        {playing ? (
+          <TouchableOpacity
+            onPress={() => {
+              stopSound();
+            }}
+            style={styles.playAudioButton}
+          >
+            <Ionicons name="ios-stop" size={24} color={"rgba(60,60,67,0.6)"} />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={() => {
+              playSound();
+            }}
+            style={styles.playAudioButton}
+          >
+            <Ionicons name="ios-play" size={24} color={"rgba(60,60,67,0.6)"} />
+          </TouchableOpacity>
+        )}
       </View>
       <View style={styles.iconsRow}>
         <TouchableOpacity style={styles.icon}>
@@ -48,7 +110,7 @@ const PostItem = ({ post }: PostItemProps) => {
             size={24}
           />
           <Text style={styles.actionText}>
-            {post.item.comments > 0 && post.item.comments}
+            {post.item.data.commentCount > 0 && post.item.data.commentCount}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.icon}>
@@ -58,7 +120,7 @@ const PostItem = ({ post }: PostItemProps) => {
             size={24}
           />
           <Text style={styles.actionText}>
-            {post.item.reposts > 0 && post.item.reposts}
+            {post.item.data.reposts > 0 && post.item.data.reposts}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.icon}>
@@ -68,7 +130,7 @@ const PostItem = ({ post }: PostItemProps) => {
             size={24}
           />
           <Text style={styles.actionText}>
-            {post.item.likes > 0 && post.item.likes}
+            {post.item.data.likeCount > 0 && post.item.data.likeCount}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.icon}>
