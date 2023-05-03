@@ -28,6 +28,8 @@ import CreatePasswordScreen from "../screens/auth/SignUp/CreatePassword/CreatePa
 import useAuth from "../hooks/useAuth";
 import SettingsScreen from "../screens/profile/SettingsScreen/SettingsScreen";
 import EditProfileScreen from "../screens/profile/EditProfile/EditProfileScreen";
+import ResetPasswordScreen from "../screens/auth/Login/ResetPassword/ResetPasswordScreen";
+import LoginScreen from "../screens/auth/Login/LoginScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -370,7 +372,16 @@ const AppNavigator = () => {
               name="ConfirmationCode"
               component={ConfirmationCodeScreen}
             />
+
+            <Stack.Screen
+              options={{
+                title: "Forgot your password?",
+              }}
+              name="ResetPassword"
+              component={ResetPasswordScreen}
+            />
           </Stack.Group>
+          <Stack.Screen name="Login" component={LoginScreen} />
         </>
       )}
     </Stack.Navigator>
