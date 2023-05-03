@@ -7,7 +7,7 @@ import { colors } from "../../../../components/colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const SettingsScreen = ({ navigation }) => {
-  const { currentUser } = useAuth();
+  const { currentUser, onLogout } = useAuth();
 
   const insets = useSafeAreaInsets();
 
@@ -72,6 +72,9 @@ const SettingsScreen = ({ navigation }) => {
       </TouchableOpacity>
 
       <TouchableOpacity
+        onPress={() => {
+          onLogout();
+        }}
         style={{
           justifyContent: "center",
           alignItems: "center",
