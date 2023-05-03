@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./stylesPostItem";
 import { Audio } from "expo-av";
+import formatTimestamp from "../utils/formatTimestamp";
 
 interface PostItemProps {
   post: {
@@ -27,9 +28,8 @@ interface PostItemProps {
 const PostItem = ({ post }: PostItemProps) => {
   const [playing, setPlaying] = useState(false);
 
-  console.log("post is here", post.item.data.audioURI);
-
-  console.log("user is here", post.item.postCreator);
+  console.log("post is here", post.item.data.time);
+  const time = formatTimestamp(post.item.data.time);
   let sound;
   async function playSound() {
     const { sound: newSound } = await Audio.Sound.createAsync(
@@ -77,7 +77,7 @@ const PostItem = ({ post }: PostItemProps) => {
               <Text style={styles.username}>
                 @{post.item.postCreator.username || "NULL"}
               </Text>
-              <Text style={styles.timeText}>· {post.item.time || "NULL"}</Text>
+              <Text style={styles.timeText}>· {time || "NULL"}</Text>
             </View>
             <Text style={styles.bodyText}>{post.item.data.body || "NULL"}</Text>
           </View>
