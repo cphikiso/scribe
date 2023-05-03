@@ -36,7 +36,7 @@ const ContactsListScreen = () => {
   const sendInvite = async (user) => {
     const { result } = await sendSMSAsync(
       [user.phoneNumbers[0].digits],
-      `This new app came out for Uni students!`
+      `This new social app just came out for Uni students! https://instagram.com/scribe.app`
     );
 
     if (result === "sent") {
