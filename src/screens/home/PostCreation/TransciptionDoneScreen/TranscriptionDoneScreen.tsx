@@ -13,6 +13,10 @@ import Animated, { FadeIn } from "react-native-reanimated";
 import { useRoute } from "@react-navigation/native";
 import { Audio } from "expo-av";
 import { StatusBar } from "expo-status-bar";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { db } from "../../../../../firebaseConfig";
+import uuid from "react-native-uuid";
+import useAuth from "../../../../hooks/useAuth";
 
 const TranscriptionDoneScreen = ({ navigation }) => {
   const [playing, setPlaying] = useState(false);
@@ -21,6 +25,7 @@ const TranscriptionDoneScreen = ({ navigation }) => {
   const [transcribedText, setTranscribedText] = useState("");
 
   const { audioURI, audioDuration } = useRoute().params;
+  const { currentUser } = useAuth();
 
   let sound; // Declare sound variable in the outer scope
   async function callWhisper(prompt) {
@@ -76,6 +81,27 @@ const TranscriptionDoneScreen = ({ navigation }) => {
     }
   }
 
+  function uploadPost() {
+    setDoc(doc(db, "posts", currentUser.uid, "userPosts", `${uuid.v4()}`), {
+      body: transcribedText,
+      uid: currentUser.uid,
+      time: serverTimestamp(),
+      likes: [],
+      comments: [],
+      audioURI: audioURI,
+      audioDuration: audioDuration,
+      likeCount: 0,
+      commentCount: 0,
+    })
+      .then(() => {
+        navigation.navigate("Home");
+      })
+      .catch((error) => {
+        Alert.alert(error.message);
+        console.warn(error);
+      });
+  }
+
   useEffect(() => {
     callWhisper(audioURI);
   }, []);
@@ -127,10 +153,11 @@ const TranscriptionDoneScreen = ({ navigation }) => {
         )}
       </View>
       <TouchableOpacity
+        disabled={!transcribedText}
         onPress={() => {
-          navigation.navigate("Home");
+          uploadPost();
         }}
-        style={styles.postButton}
+        style={[styles.postButton, !transcribedText && { opacity: 0.5 }]}
       >
         <Text style={styles.buttonText}>Post</Text>
       </TouchableOpacity>
