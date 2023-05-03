@@ -6,7 +6,7 @@ import {
   ActivityIndicator,
   Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Lottie from "lottie-react-native";
 import { styles } from "./styles";
 import Animated, { FadeIn } from "react-native-reanimated";
@@ -18,10 +18,9 @@ const TranscriptionDoneScreen = ({ navigation }) => {
   const [playing, setPlaying] = useState(false);
   const [transcribing, setTranscribing] = useState(true);
   const [listening, setListening] = useState(false);
+  const [transcribedText, setTranscribedText] = useState("");
 
   const { audioURI, audioDuration } = useRoute().params;
-
-  console.log("URIIIIIIIIIIII", audioURI, audioDuration);
 
   let sound; // Declare sound variable in the outer scope
   async function callWhisper(prompt) {
@@ -38,10 +37,10 @@ const TranscriptionDoneScreen = ({ navigation }) => {
       );
       if (response.status == 200) {
         const data = await response.json();
-        console.log("Davinci called successfully", data);
 
         if (data.text) {
-          console.log("query complete", data.text);
+          setTranscribedText(data.text);
+          setTranscribing(false);
         } else {
           console.error("Error: data or data.text is undefined.");
         }
@@ -49,26 +48,20 @@ const TranscriptionDoneScreen = ({ navigation }) => {
     } catch (error) {
       Alert.alert(error.message);
       console.warn(error);
-      console.log("ERROR", error, "ERROR");
     }
   }
 
   async function playSound() {
-    console.log("Loading Sound");
-    // callDavinci("what's 9 + 10?");
-    callWhisper(audioURI);
     const { sound: newSound } = await Audio.Sound.createAsync(
       { uri: audioURI },
       { shouldPlay: true }
     );
     sound = newSound;
-    //console.log("Playing Sound", sound);
 
     sound.setOnPlaybackStatusUpdate((status) => {
       if (!status.isPlaying && status.didJustFinish) {
         setListening(false);
         setPlaying(false);
-        console.log("Sound stopped");
       }
     });
 
@@ -76,13 +69,16 @@ const TranscriptionDoneScreen = ({ navigation }) => {
   }
 
   function stopSound() {
-    console.log("Stopping Sound");
     if (sound) {
       sound.stopAsync();
     } else {
-      console.log("Sound not loaded yet");
+      null;
     }
   }
+
+  useEffect(() => {
+    callWhisper(audioURI);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -127,11 +123,7 @@ const TranscriptionDoneScreen = ({ navigation }) => {
             </Text>
           </View>
         ) : (
-          <Text style={styles.bodyText}>
-            these aren’t just random questions. they reveal (and motivate) some
-            key design decisions. for each of these, what do you *want* the
-            answer to be, and why? what is the “price” of your chosen answer?
-          </Text>
+          <Text style={styles.bodyText}>{transcribedText}</Text>
         )}
       </View>
       <TouchableOpacity
