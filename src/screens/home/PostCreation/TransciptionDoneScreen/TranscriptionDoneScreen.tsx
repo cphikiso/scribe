@@ -21,31 +21,30 @@ const TranscriptionDoneScreen = ({ navigation }) => {
 
   const { audioURI, audioDuration } = useRoute().params;
 
-  console.log(audioURI, audioDuration);
+  console.log("URIIIIIIIIIIII", audioURI, audioDuration);
 
   let sound; // Declare sound variable in the outer scope
-  async function callDavinci() {
+  async function callWhisper(prompt) {
     try {
       const response = await fetch(
-        "https://us-central1-scribe-speak-your-mind.cloudfunctions.net/callDavinci",
+        "https://us-central1-scribe-speak-your-mind.cloudfunctions.net/callWhisper",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
+          body: JSON.stringify({ prompt }),
         }
       );
       if (response.status == 200) {
         const data = await response.json();
         console.log("Davinci called successfully", data);
 
-        console.log(
-          "query complete",
-          data,
-          "COMPLETION",
-          data.choices[0].text,
-          "TEXT"
-        );
+        if (data.text) {
+          console.log("query complete", data.text);
+        } else {
+          console.error("Error: data or data.text is undefined.");
+        }
       }
     } catch (error) {
       Alert.alert(error.message);
@@ -56,7 +55,8 @@ const TranscriptionDoneScreen = ({ navigation }) => {
 
   async function playSound() {
     console.log("Loading Sound");
-    callDavinci();
+    // callDavinci("what's 9 + 10?");
+    callWhisper(audioURI);
     const { sound: newSound } = await Audio.Sound.createAsync(
       { uri: audioURI },
       { shouldPlay: true }

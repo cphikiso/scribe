@@ -26,15 +26,50 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getFunctions, httpsCallable } from "firebase/functions";
+import useAuth from "../../../../hooks/useAuth";
+import uuid from "react-native-uuid";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../../../../firebaseConfig";
+// import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
 
 const CreatePostScreen = ({ navigation }) => {
   const [recording, setRecording] = useState();
   const [recordingProcess, setRecordingProcess] = useState(true);
   const [listening, setListening] = useState(false);
   const [uploadAudio, setUploadAudio] = useState(false);
+  const [audioRecording, setAudioRecording] = useState(null);
   const [audioURI, setAudioURI] = useState(null);
 
   const [recordingDuration, setRecordingDuration] = useState(null);
+  const { currentUser } = useAuth();
+
+  async function uploadAudioAsync(uri) {
+    // Upload the local audio file to Firebase Storage
+    const audioBlob = await fetch(uri).then((response) => response.blob());
+    const audioRef = ref(getStorage(), `audios/${uuid.v4()}.m4a`);
+    await uploadBytes(audioRef, audioBlob);
+
+    // Get the Firebase Storage path of the uploaded audio file
+    const firebaseStoragePath = audioRef.fullPath;
+    // Initialize the Firebase Functions and the callable function
+    const functions = getFunctions();
+    const convertAudioToMp3 = httpsCallable(functions, "convertAudioToMp3");
+
+    // Call the Firebase Function to convert the audio file to MP3 format
+    const sourceFile = firebaseStoragePath;
+    const targetFile = await convertAudioToMp3({ sourceFile });
+
+    // Get the download URL of the converted file from the Firebase Function's response
+    const url = targetFile.data;
+    console.log("converted url", url, "targetFile", targetFile);
+    // Log the URL and navigate to the Transcribe screen with the new audio file's URL
+    navigation.navigate("Transcribe", {
+      audioURI: url,
+      audioDuration: recordingDuration,
+    });
+  }
 
   async function startRecording() {
     try {
@@ -82,7 +117,7 @@ const CreatePostScreen = ({ navigation }) => {
 
     const status = recording;
     const uri = recording.getURI();
-    setAudioURI(uri);
+    setAudioRecording(uri);
     console.log(
       "Recording stopped and stored at",
       uri,
@@ -96,7 +131,7 @@ const CreatePostScreen = ({ navigation }) => {
   async function playSound() {
     console.log("Loading Sound");
     const { sound: newSound } = await Audio.Sound.createAsync(
-      { uri: audioURI },
+      { uri: audioRecording },
       { shouldPlay: true }
     );
     sound = newSound; // Assign the sound object to the outer scope variable
@@ -261,10 +296,7 @@ const CreatePostScreen = ({ navigation }) => {
                 <TouchableOpacity
                   onPress={() => {
                     setUploadAudio(true);
-                    navigation.navigate("Transcribe", {
-                      audioURI,
-                      audioDuration: recordingDuration,
-                    });
+                    uploadAudioAsync(audioRecording);
                   }}
                   style={styles.modalButton}
                 >
