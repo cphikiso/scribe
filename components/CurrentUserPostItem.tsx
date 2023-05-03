@@ -4,8 +4,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./stylesPostItem";
 import { Audio } from "expo-av";
 import formatTimestamp from "../utils/formatTimestamp";
+import useAuth from "../src/hooks/useAuth";
 
-interface PostItemProps {
+interface CurrentUserPostItemProps {
   post: {
     index: number;
     item: {
@@ -25,8 +26,10 @@ interface PostItemProps {
   };
 }
 
-const PostItem = ({ post }: PostItemProps) => {
+const CurrentUserPostItem = ({ post }: CurrentUserPostItemProps) => {
   const [playing, setPlaying] = useState(false);
+
+  const { currentUser } = useAuth();
 
   console.log("post is here", post.item.data.time);
   const time = formatTimestamp(post.item.data.time);
@@ -63,19 +66,14 @@ const PostItem = ({ post }: PostItemProps) => {
       <View style={styles.outerFlexRow}>
         <View style={styles.innerFlexRow}>
           <Image
-            source={
-              post.item.postCreator.profilePicture ||
-              require("../assets/pic.jpg")
-            }
+            source={currentUser.profilePicture || require("../assets/pic.jpg")}
             style={styles.profilePic}
           />
           <View>
             <View style={styles.titleRow}>
-              <Text style={styles.name}>
-                {post.item.postCreator.fullName || "NULL"}
-              </Text>
+              <Text style={styles.name}>{currentUser.fullName || "NULL"}</Text>
               <Text style={styles.username}>
-                @{post.item.postCreator.username || "NULL"}
+                @{currentUser.username || "NULL"}
               </Text>
               <Text style={styles.timeText}>· {time || "NULL"}</Text>
             </View>
@@ -146,4 +144,4 @@ const PostItem = ({ post }: PostItemProps) => {
   );
 };
 
-export default PostItem;
+export default CurrentUserPostItem;

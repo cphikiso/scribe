@@ -33,6 +33,7 @@ const LandingScreen = ({ navigation }) => {
           <Text style={styles.buttonText}>Sign up</Text>
         </TouchableOpacity>
         <TouchableOpacity
+          onPress={() => navigation.navigate("Login")}
           style={[
             styles.button,
             { backgroundColor: "rgba(116, 116, 128, 0.08)", marginTop: 14 },
