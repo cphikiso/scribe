@@ -26,54 +26,74 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getFunctions, httpsCallable } from "firebase/functions";
+import useAuth from "../../../../hooks/useAuth";
+import uuid from "react-native-uuid";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../../../../firebaseConfig";
+// import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
 
 const CreatePostScreen = ({ navigation }) => {
   const [recording, setRecording] = useState();
-  const [recordingProcess, setRecordingProcess] = useState(true);
+  const [recordingProcess, setRecordingProcess] = useState(false);
   const [listening, setListening] = useState(false);
   const [uploadAudio, setUploadAudio] = useState(false);
+  const [audioRecording, setAudioRecording] = useState(null);
   const [audioURI, setAudioURI] = useState(null);
 
   const [recordingDuration, setRecordingDuration] = useState(null);
+  const { currentUser } = useAuth();
+
+  async function uploadAudioAsync(uri) {
+    // Upload the local audio file to Firebase Storage
+    const audioBlob = await fetch(uri).then((response) => response.blob());
+    const audioRef = ref(getStorage(), `audios/${uuid.v4()}.m4a`);
+    await uploadBytes(audioRef, audioBlob);
+
+    // Get the Firebase Storage path of the uploaded audio file
+    const firebaseStoragePath = audioRef.fullPath;
+    // Initialize the Firebase Functions and the callable function
+    const functions = getFunctions();
+    const convertAudioToMp3 = httpsCallable(functions, "convertAudioToMp3");
+
+    // Call the Firebase Function to convert the audio file to MP3 format
+    const sourceFile = firebaseStoragePath;
+    const targetFile = await convertAudioToMp3({ sourceFile });
+
+    // Get the download URL of the converted file from the Firebase Function's response
+    const url = targetFile.data;
+    // Log the URL and navigate to the Transcribe screen with the new audio file's URL
+    navigation.navigate("Transcribe", {
+      audioURI: url,
+      audioDuration: recordingDuration,
+    });
+  }
 
   async function startRecording() {
     try {
-      console.log("Requesting permissions..");
       await Audio.requestPermissionsAsync();
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: true,
         playsInSilentModeIOS: true,
       });
 
-      console.log("Starting recording..");
       const { recording, status, sound } = await Audio.Recording.createAsync(
         Audio.RecordingOptionsPresets.HIGH_QUALITY
       );
 
       setRecording(recording);
       recording.setOnRecordingStatusUpdate((status) => {
-        console.log("Recording status", status);
-        console.log("millis", status.durationMillis);
-        console.log("formatted", getDurationFormatted(status.durationMillis));
-        console.log("isRecording", status.isRecording);
         if (status.isRecording) {
           setRecordingDuration(getDurationFormatted(status.durationMillis));
         }
       });
-
-      console.log("Recording started");
-      // console.log("Recording status", status);
     } catch (err) {
       console.error("Failed to start recording", err);
     }
   }
 
-  useEffect(() => {
-    startRecording();
-  }, []);
-
   async function stopRecording() {
-    console.log("Stopping recording..");
     setRecording(undefined);
     await recording.stopAndUnloadAsync();
     await Audio.setAudioModeAsync({
@@ -82,30 +102,21 @@ const CreatePostScreen = ({ navigation }) => {
 
     const status = recording;
     const uri = recording.getURI();
-    setAudioURI(uri);
-    console.log(
-      "Recording stopped and stored at",
-      uri,
-      "status ON STOP",
-      status
-    );
+    setAudioRecording(uri);
   }
 
   let sound; // Declare sound variable in the outer scope
 
   async function playSound() {
-    console.log("Loading Sound");
     const { sound: newSound } = await Audio.Sound.createAsync(
-      { uri: audioURI },
+      { uri: audioRecording },
       { shouldPlay: true }
     );
     sound = newSound; // Assign the sound object to the outer scope variable
-    console.log("Playing Sound", sound);
 
     sound.setOnPlaybackStatusUpdate((status) => {
       if (!status.isPlaying && status.didJustFinish) {
         setListening(false);
-        console.log("Sound stopped");
       }
     });
 
@@ -113,11 +124,10 @@ const CreatePostScreen = ({ navigation }) => {
   }
 
   function stopSound() {
-    console.log("Stopping Sound");
     if (sound) {
       sound.stopAsync();
     } else {
-      console.log("Sound not loaded yet");
+      null;
     }
   }
   {
@@ -167,7 +177,7 @@ const CreatePostScreen = ({ navigation }) => {
         <TouchableWithoutFeedback
           style={styles.touchableWithoutFeedback}
           onPress={() => {
-            stopRecording();
+            recordingProcess ? stopRecording() : null;
             navigation.goBack();
           }}
         />
@@ -185,7 +195,7 @@ const CreatePostScreen = ({ navigation }) => {
             style={styles.cancel}
             hitSlop={{ top: 44, bottom: 44, left: 44, right: 44 }}
             onPress={() => {
-              stopRecording();
+              recordingProcess ? stopRecording() : null;
               navigation.goBack();
             }}
           >
@@ -229,19 +239,21 @@ const CreatePostScreen = ({ navigation }) => {
               <>
                 <View>
                   {!listening ? (
-                    <TouchableOpacity
-                      onPress={() => {
-                        playSound();
-                        setListening(true);
-                      }}
-                      style={styles.playbackIconContainer}
-                    >
-                      <Ionicons
-                        name="ios-play-circle-outline"
-                        size={68}
-                        color="white"
-                      />
-                    </TouchableOpacity>
+                    audioRecording ? (
+                      <TouchableOpacity
+                        onPress={() => {
+                          playSound();
+                          setListening(true);
+                        }}
+                        style={styles.playbackIconContainer}
+                      >
+                        <Ionicons
+                          name="ios-play-circle-outline"
+                          size={68}
+                          color="white"
+                        />
+                      </TouchableOpacity>
+                    ) : null
                   ) : (
                     <TouchableOpacity
                       onPress={() => {
@@ -258,19 +270,29 @@ const CreatePostScreen = ({ navigation }) => {
                     </TouchableOpacity>
                   )}
                 </View>
-                <TouchableOpacity
-                  onPress={() => {
-                    setUploadAudio(true);
-                    navigation.navigate("Transcribe", {
-                      audioURI,
-                      audioDuration: recordingDuration,
-                    });
-                  }}
-                  style={styles.modalButton}
-                >
-                  <Text style={styles.buttonText}>Transcribe</Text>
-                  {/* Start scribing */}
-                </TouchableOpacity>
+                {audioRecording ? (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setUploadAudio(true);
+                      uploadAudioAsync(audioRecording);
+                    }}
+                    style={styles.modalButton}
+                  >
+                    <Text style={styles.buttonText}>Transcribe</Text>
+                    {/* Start scribing */}
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => {
+                      startRecording();
+                      setRecordingProcess(true);
+                    }}
+                    style={styles.modalButton}
+                  >
+                    <Text style={styles.buttonText}>Start recording</Text>
+                    {/* Start scribing */}
+                  </TouchableOpacity>
+                )}
               </>
             )}
           </>
