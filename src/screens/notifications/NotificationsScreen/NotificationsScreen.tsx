@@ -3,17 +3,24 @@ import { StatusBar } from "expo-status-bar";
 import { FlatList, Text, View } from "react-native";
 import { styles } from "./styles";
 import NotificationItem from "../../../../components/NotificationItem";
+import { colors } from "../../../../components/colors";
 
 const NotificationsScreen = () => {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <FlatList
-        data={notifications}
-        renderItem={(notification) => (
-          <NotificationItem notification={notification} />
-        )}
-      />
+
+      <Text
+        style={{
+          fontFamily: "SFProRoundedHeavy",
+          fontSize: 28,
+          color: "rgba(112, 112, 112, 0.2)",
+          textAlign: "center",
+        }}
+      >
+        {" "}
+        Work in progress ...{"\n"} nothing to see here yet
+      </Text>
     </View>
   );
 };
