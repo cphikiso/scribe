@@ -17,6 +17,8 @@ const EditBioScreen = () => {
     console.log("updating bio", bio);
     updateDoc(doc(db, "users", currentUser?.uid), {
       bio,
+    }).then(() => {
+      navigation.goBack();
     });
   };
 

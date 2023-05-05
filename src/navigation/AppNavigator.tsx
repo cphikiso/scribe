@@ -254,7 +254,7 @@ const AppNavigator = () => {
               presentation: "modal",
               headerShown: true,
               headerLeft: () => (
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
                   <Text
                     style={{
                       fontFamily: "SFProRoundedRegular",

@@ -1,10 +1,18 @@
-import { View, Text, TouchableOpacity, Platform } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Platform,
+  TextInput,
+} from "react-native";
 import React, { useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/core";
 import useAuth from "../../../../hooks/useAuth";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../../../firebaseConfig";
 import { colors } from "../../../../../components/colors";
+import { StatusBar } from "expo-status-bar";
+import { styles } from "./styles";
 
 const EditFullNameScreen = () => {
   const { currentUser } = useAuth();
@@ -17,6 +25,8 @@ const EditFullNameScreen = () => {
     console.log("updating full name", fullName);
     updateDoc(doc(db, "users", currentUser?.uid), {
       fullName,
+    }).then(() => {
+      navigation.goBack();
     });
   };
 
@@ -48,10 +58,22 @@ const EditFullNameScreen = () => {
         </TouchableOpacity>
       ),
     });
-  }, [navigation, disabled]);
+  }, [navigation, disabled, fullName]);
   return (
-    <View>
-      <Text>EditFullNameScreen</Text>
+    <View style={styles.container}>
+      <StatusBar style="light" backgroundColor={colors.purple} />
+      <View style={styles.rowContainer}>
+        <Text style={styles.label}>Full name</Text>
+        <TextInput
+          style={styles.input}
+          value={fullName}
+          onChangeText={(text) => setFullName(text)}
+          placeholder="Enter your full name"
+          autoFocus
+          selectionColor={colors.purple}
+          cursorColor={colors.purple}
+        />
+      </View>
     </View>
   );
 };

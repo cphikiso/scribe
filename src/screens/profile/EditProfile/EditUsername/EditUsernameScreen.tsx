@@ -1,10 +1,18 @@
-import { View, Text, TouchableOpacity, Platform } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Platform,
+  TextInput,
+} from "react-native";
 import React, { useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/core";
 import useAuth from "../../../../hooks/useAuth";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../../../firebaseConfig";
 import { colors } from "../../../../../components/colors";
+import { StatusBar } from "expo-status-bar";
+import { styles } from "./styles";
 
 const EditUsernameScreen = () => {
   const { currentUser } = useAuth();
@@ -17,6 +25,8 @@ const EditUsernameScreen = () => {
     console.log("updating username", username);
     updateDoc(doc(db, "users", currentUser?.uid), {
       username,
+    }).then(() => {
+      navigation.goBack();
     });
   };
 
@@ -48,10 +58,31 @@ const EditUsernameScreen = () => {
         </TouchableOpacity>
       ),
     });
-  }, [navigation, disabled]);
+  }, [navigation, disabled, username]);
   return (
-    <View>
-      <Text>EditUsernameScreen</Text>
+    <View style={styles.container}>
+      <StatusBar style="light" backgroundColor={colors.purple} />
+      <View style={styles.rowContainer}>
+        <Text style={styles.label}>Username</Text>
+        <TextInput
+          style={styles.input}
+          value={username}
+          onChangeText={(text) => {
+            const alphanumericRegex = /[^a-zA-Z0-9]/g;
+            const cleanedText = text.replace(alphanumericRegex, "");
+
+            if (cleanedText.includes(" ")) {
+              setUsername(cleanedText.trim().toLowerCase());
+            } else {
+              setUsername(cleanedText.toLowerCase());
+            }
+          }}
+          placeholder="Choose your username"
+          autoFocus
+          selectionColor={colors.purple}
+          cursorColor={colors.purple}
+        />
+      </View>
     </View>
   );
 };
