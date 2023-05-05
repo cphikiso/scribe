@@ -24,16 +24,19 @@ const EditProfileScreen = () => {
   const navigation = useNavigation();
 
   const updateUsername = () => {
+    console.log("updating username", username);
     updateDoc(doc(db, "users", currentUser?.uid), {
       username: username,
     });
   };
   const updateFullName = () => {
+    console.log("updating full name", fullName);
     updateDoc(doc(db, "users", currentUser?.uid), {
       fullName,
     });
   };
   const updateBio = () => {
+    console.log("updating bio", bio);
     updateDoc(doc(db, "users", currentUser?.uid), {
       bio,
     });
@@ -72,7 +75,7 @@ const EditProfileScreen = () => {
         </TouchableOpacity>
       ),
     });
-  }, [navigation, disabled]);
+  }, [navigation, disabled, username, fullName, bio]);
 
   return (
     <ScrollView style={styles.container}>
@@ -138,7 +141,7 @@ const EditProfileScreen = () => {
             placeholderTextColor={colors.grey60}
             autoCorrect={false}
             value={bio}
-            onChangeText={(text) => setBio(text)}
+            onChangeText={setBio}
             autoFocus={true}
             cursorColor={colors.purple}
             selectionColor={colors.purple}

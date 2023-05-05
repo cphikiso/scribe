@@ -63,7 +63,9 @@ const ProfileScreen = ({ navigation }) => {
               />
               <View style={styles.nameBio}>
                 <Text style={styles.name}>{currentUser.fullName}</Text>
-                <Text style={styles.bio}>a lil bio about me ...</Text>
+                <Text style={styles.bio}>
+                  {currentUser?.bio || "your bio will be here"}
+                </Text>
               </View>
             </View>
 
