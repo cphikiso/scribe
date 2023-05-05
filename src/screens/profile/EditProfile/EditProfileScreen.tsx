@@ -17,60 +17,8 @@ import { db } from "../../../../firebaseConfig";
 
 const EditProfileScreen = () => {
   const { currentUser } = useAuth();
-  const [username, setUsername] = useState<string>(currentUser?.username);
-  const [fullName, setFullName] = useState<string>(currentUser?.fullName);
-  const [bio, setBio] = useState<string>(currentUser?.bio);
 
   const navigation = useNavigation();
-
-  const updateUsername = () => {
-    console.log("updating username", username);
-    updateDoc(doc(db, "users", currentUser?.uid), {
-      username: username,
-    });
-  };
-
-  const updateBio = () => {
-    console.log("updating bio", bio);
-    updateDoc(doc(db, "users", currentUser?.uid), {
-      bio,
-    });
-  };
-  const disabled = username.length < 3 || bio.length < 3 || fullName.length < 3;
-  const updateProfile = () => {
-    updateUsername();
-
-    updateBio();
-    navigation.goBack();
-  };
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity
-          disabled={disabled}
-          style={{
-            marginRight: Platform.OS === "web" && 16,
-          }}
-          onPress={() => {
-            if (!disabled) {
-              updateProfile();
-            }
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: "SFProRoundedHeavy",
-              fontSize: 17,
-              color: !disabled ? colors.purple : colors.purpl30,
-            }}
-          >
-            Done
-          </Text>
-        </TouchableOpacity>
-      ),
-    });
-  }, [navigation, disabled, username, fullName, bio]);
 
   return (
     <ScrollView style={styles.container}>

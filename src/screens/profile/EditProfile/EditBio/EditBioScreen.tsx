@@ -1,10 +1,18 @@
-import { View, Text, TouchableOpacity, Platform } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Platform,
+  TextInput,
+} from "react-native";
 import React, { useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/core";
 import useAuth from "../../../../hooks/useAuth";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../../../firebaseConfig";
 import { colors } from "../../../../../components/colors";
+import { StatusBar } from "expo-status-bar";
+import { styles } from "./styles";
 
 const EditBioScreen = () => {
   const { currentUser } = useAuth();
@@ -50,10 +58,24 @@ const EditBioScreen = () => {
         </TouchableOpacity>
       ),
     });
-  }, [navigation, disabled]);
+  }, [navigation, disabled, bio]);
   return (
-    <View>
-      <Text>EditBioScreen</Text>
+    <View style={styles.container}>
+      <StatusBar style="light" backgroundColor={colors.purple} />
+      <View style={styles.rowContainer}>
+        <Text style={styles.label}>Biography</Text>
+        <TextInput
+          style={styles.input}
+          value={bio}
+          onChangeText={(text) => setBio(text)}
+          placeholder="Tell people a little about yourself"
+          autoFocus
+          selectionColor={colors.purple}
+          cursorColor={colors.purple}
+          multiline
+          maxLength={100}
+        />
+      </View>
     </View>
   );
 };
