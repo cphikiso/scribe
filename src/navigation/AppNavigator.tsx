@@ -240,7 +240,11 @@ const AppNavigator = () => {
             }}
           >
             <Stack.Screen name="Settings" component={SettingsScreen} />
-            <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+            <Stack.Screen
+              name="EditProfile"
+              options={{ title: "Edit Profile" }}
+              component={EditProfileScreen}
+            />
           </Stack.Group>
           <Stack.Group screenOptions={{ presentation: "transparentModal" }}>
             <Stack.Screen name="CreatePost" component={CreatePostScreen} />
