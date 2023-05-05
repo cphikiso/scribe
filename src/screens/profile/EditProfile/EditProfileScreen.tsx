@@ -24,72 +24,55 @@ const EditProfileScreen = () => {
   const navigation = useNavigation();
 
   const updateUsername = () => {
-    if (username.length > 3) {
-      updateDoc(doc(db, "users", currentUser?.uid), {
-        username,
-      });
-    }
+    updateDoc(doc(db, "users", currentUser?.uid), {
+      username: username,
+    });
   };
   const updateFullName = () => {
-    if (username.length > 3) {
-      updateDoc(doc(db, "users", currentUser?.uid), {
-        fullName,
-      });
-    }
+    updateDoc(doc(db, "users", currentUser?.uid), {
+      fullName,
+    });
   };
   const updateBio = () => {
-    if (username.length > 3) {
-      updateDoc(doc(db, "users", currentUser?.uid), {
-        bio,
-      });
-    }
+    updateDoc(doc(db, "users", currentUser?.uid), {
+      bio,
+    });
+  };
+  const disabled = username.length < 3 || bio.length < 3 || fullName.length < 3;
+  const updateProfile = () => {
+    updateUsername();
+    updateFullName();
+    updateBio();
+    navigation.goBack();
   };
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () =>
-        username.length < 3 || bio.length < 3 || fullName.length < 3 ? (
-          <View
+      headerRight: () => (
+        <TouchableOpacity
+          disabled={disabled}
+          style={{
+            marginRight: Platform.OS === "web" && 16,
+          }}
+          onPress={() => {
+            if (!disabled) {
+              updateProfile();
+            }
+          }}
+        >
+          <Text
             style={{
-              marginRight: Platform.OS === "web" && 16,
+              fontFamily: "SFProRoundedHeavy",
+              fontSize: 17,
+              color: !disabled ? colors.purple : colors.purpl30,
             }}
           >
-            <Text
-              style={{
-                fontFamily: "SFProRoundedHeavy",
-                fontSize: 17,
-                color: colors.purpl30,
-              }}
-            >
-              Done
-            </Text>
-          </View>
-        ) : (
-          <TouchableOpacity
-            style={{
-              marginRight: Platform.OS === "web" && 16,
-            }}
-            onPress={() => {
-              updateUsername();
-              updateFullName();
-              updateBio();
-
-              navigation.goBack();
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "SFProRoundedHeavy",
-                fontSize: 17,
-                color: colors.purple,
-              }}
-            >
-              Done
-            </Text>
-          </TouchableOpacity>
-        ),
+            Done
+          </Text>
+        </TouchableOpacity>
+      ),
     });
-  }, [navigation, setFullName, setBio, setUsername]);
+  }, [navigation, disabled]);
 
   return (
     <ScrollView style={styles.container}>
