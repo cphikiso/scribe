@@ -5,14 +5,92 @@ import {
   Image,
   ScrollView,
   TextInput,
+  Platform,
 } from "react-native";
-import React from "react";
+import React, { useLayoutEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/core";
 import { styles } from "./styles";
 import useAuth from "../../../hooks/useAuth";
 import { colors } from "../../../../components/colors";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../../../firebaseConfig";
 
 const EditProfileScreen = () => {
   const { currentUser } = useAuth();
+  const [username, setUsername] = useState<string>(currentUser?.username);
+  const [fullName, setFullName] = useState<string>(currentUser?.fullName);
+  const [bio, setBio] = useState<string>(currentUser?.bio);
+
+  const navigation = useNavigation();
+
+  const updateUsername = () => {
+    if (username.length > 3) {
+      updateDoc(doc(db, "users", currentUser?.uid), {
+        username,
+      });
+    }
+  };
+  const updateFullName = () => {
+    if (username.length > 3) {
+      updateDoc(doc(db, "users", currentUser?.uid), {
+        fullName,
+      });
+    }
+  };
+  const updateBio = () => {
+    if (username.length > 3) {
+      updateDoc(doc(db, "users", currentUser?.uid), {
+        bio,
+      });
+    }
+  };
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () =>
+        username.length < 3 || bio.length < 3 || fullName.length < 3 ? (
+          <View
+            style={{
+              marginRight: Platform.OS === "web" && 16,
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: "SFProRoundedHeavy",
+                fontSize: 17,
+                color: colors.purpl30,
+              }}
+            >
+              Done
+            </Text>
+          </View>
+        ) : (
+          <TouchableOpacity
+            style={{
+              marginRight: Platform.OS === "web" && 16,
+            }}
+            onPress={() => {
+              updateUsername();
+              updateFullName();
+              updateBio();
+
+              navigation.goBack();
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: "SFProRoundedHeavy",
+                fontSize: 17,
+                color: colors.purple,
+              }}
+            >
+              Done
+            </Text>
+          </TouchableOpacity>
+        ),
+    });
+  }, [navigation, setFullName, setBio, setUsername]);
+
   return (
     <ScrollView style={styles.container}>
       <TouchableOpacity style={styles.imageContainer}>
@@ -31,8 +109,8 @@ const EditProfileScreen = () => {
             placeholderTextColor={"rgba(255,255,255,0.5)"}
             autoCapitalize="words"
             autoCorrect={false}
-            value={currentUser.fullName}
-            //onChangeText={setFullName}
+            value={fullName}
+            onChangeText={(text) => setFullName(text)}
             autoFocus={true}
             cursorColor={colors.purple}
             selectionColor={colors.purple}
@@ -45,10 +123,18 @@ const EditProfileScreen = () => {
             style={styles.input}
             placeholder="@username"
             placeholderTextColor={"rgba(255,255,255,0.5)"}
-            autoCapitalize="words"
             autoCorrect={false}
-            value={currentUser.username}
-            //onChangeText={setFullName}
+            value={username}
+            onChangeText={(text) => {
+              const alphanumericRegex = /[^a-zA-Z0-9]/g;
+              const cleanedText = text.replace(alphanumericRegex, "");
+
+              if (cleanedText.includes(" ")) {
+                setUsername(cleanedText.trim().toLowerCase());
+              } else {
+                setUsername(cleanedText.toLowerCase());
+              }
+            }}
             autoFocus={true}
             cursorColor={colors.purple}
             selectionColor={colors.purple}
@@ -67,10 +153,9 @@ const EditProfileScreen = () => {
             style={[styles.input, { marginTop: 12 }]}
             placeholder="Biography ..."
             placeholderTextColor={colors.grey60}
-            autoCapitalize="words"
             autoCorrect={false}
-            //value={currentUser?.bio}
-            //onChangeText={setFullName}
+            value={bio}
+            onChangeText={(text) => setBio(text)}
             autoFocus={true}
             cursorColor={colors.purple}
             selectionColor={colors.purple}
