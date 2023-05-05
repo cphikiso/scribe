@@ -29,12 +29,7 @@ const EditProfileScreen = () => {
       username: username,
     });
   };
-  const updateFullName = () => {
-    console.log("updating full name", fullName);
-    updateDoc(doc(db, "users", currentUser?.uid), {
-      fullName,
-    });
-  };
+
   const updateBio = () => {
     console.log("updating bio", bio);
     updateDoc(doc(db, "users", currentUser?.uid), {
@@ -44,7 +39,7 @@ const EditProfileScreen = () => {
   const disabled = username.length < 3 || bio.length < 3 || fullName.length < 3;
   const updateProfile = () => {
     updateUsername();
-    updateFullName();
+
     updateBio();
     navigation.goBack();
   };
@@ -87,68 +82,32 @@ const EditProfileScreen = () => {
       </TouchableOpacity>
 
       <View style={styles.infoContainer}>
-        <View style={styles.rowContainer}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("EditFullName")}
+          style={styles.rowContainer}
+        >
           <Text style={styles.label}>Full name</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Full Name"
-            placeholderTextColor={"rgba(255,255,255,0.5)"}
-            autoCapitalize="words"
-            autoCorrect={false}
-            value={fullName}
-            onChangeText={(text) => setFullName(text)}
-            autoFocus={true}
-            cursorColor={colors.purple}
-            selectionColor={colors.purple}
-            maxLength={18}
-          />
-        </View>
-        <View style={styles.rowContainer}>
+          <Text style={styles.input}>{currentUser?.fullName}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("EditUsername")}
+          style={styles.rowContainer}
+        >
           <Text style={styles.label}>Username</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="@username"
-            placeholderTextColor={"rgba(255,255,255,0.5)"}
-            autoCorrect={false}
-            value={username}
-            onChangeText={(text) => {
-              const alphanumericRegex = /[^a-zA-Z0-9]/g;
-              const cleanedText = text.replace(alphanumericRegex, "");
+          <Text style={styles.input}>{currentUser?.username}</Text>
+        </TouchableOpacity>
 
-              if (cleanedText.includes(" ")) {
-                setUsername(cleanedText.trim().toLowerCase());
-              } else {
-                setUsername(cleanedText.toLowerCase());
-              }
-            }}
-            autoFocus={true}
-            cursorColor={colors.purple}
-            selectionColor={colors.purple}
-            maxLength={18}
-          />
-        </View>
-
-        <View
+        <TouchableOpacity
+          onPress={() => navigation.navigate("EditBio")}
           style={[
             styles.rowContainer,
-            { height: 120, alignItems: "flex-start", paddingTop: 12 },
+            { height: 120, alignItems: "flex-start" },
           ]}
         >
-          <Text style={styles.label}>Biography</Text>
-          <TextInput
-            style={[styles.input, { marginTop: 12 }]}
-            placeholder="Biography ..."
-            placeholderTextColor={colors.grey60}
-            autoCorrect={false}
-            value={bio}
-            onChangeText={setBio}
-            autoFocus={true}
-            cursorColor={colors.purple}
-            selectionColor={colors.purple}
-            maxLength={120}
-            multiline={true}
-          />
-        </View>
+          <Text style={[styles.label, { paddingTop: 16 }]}>Biography</Text>
+
+          <Text style={styles.input}>{currentUser?.bio}</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );

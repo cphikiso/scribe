@@ -30,6 +30,9 @@ import SettingsScreen from "../screens/profile/SettingsScreen/SettingsScreen";
 import EditProfileScreen from "../screens/profile/EditProfile/EditProfileScreen";
 import ResetPasswordScreen from "../screens/auth/Login/ResetPassword/ResetPasswordScreen";
 import LoginScreen from "../screens/auth/Login/LoginScreen";
+import EditFullNameScreen from "../screens/profile/EditProfile/EditFullName/EditFullNameScreen";
+import EditUsernameScreen from "../screens/profile/EditProfile/EditUsername/EditUsernameScreen";
+import EditBioScreen from "../screens/profile/EditProfile/EditBio/EditBioScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -244,6 +247,41 @@ const AppNavigator = () => {
               name="EditProfile"
               options={{ title: "Edit Profile" }}
               component={EditProfileScreen}
+            />
+          </Stack.Group>
+          <Stack.Group
+            screenOptions={{
+              presentation: "modal",
+              headerShown: true,
+              headerLeft: () => (
+                <TouchableOpacity>
+                  <Text
+                    style={{
+                      fontFamily: "SFProRoundedRegular",
+                      fontSize: 17,
+                      color: colors.purple,
+                    }}
+                  >
+                    Cancel
+                  </Text>
+                </TouchableOpacity>
+              ),
+            }}
+          >
+            <Stack.Screen
+              options={{ title: "Edit Full name" }}
+              name="EditFullName"
+              component={EditFullNameScreen}
+            />
+            <Stack.Screen
+              options={{ title: "Edit username" }}
+              name="EditUsername"
+              component={EditUsernameScreen}
+            />
+            <Stack.Screen
+              options={{ title: "Edit Biography" }}
+              name="EditBio"
+              component={EditBioScreen}
             />
           </Stack.Group>
           <Stack.Group screenOptions={{ presentation: "transparentModal" }}>
