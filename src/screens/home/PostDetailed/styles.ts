@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   container: {
@@ -6,6 +6,12 @@ export const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingHorizontal: 16,
     paddingTop: 28,
+  },
+  commentContainer: {
+    flex: 1,
+    backgroundColor: "#fff",
+    paddingHorizontal: 16,
+    paddingTop: 12,
   },
   outerFlexRow: {
     flexDirection: "row",
@@ -97,5 +103,26 @@ export const styles = StyleSheet.create({
     color: "rgba(60,60,67,0.6)",
     fontFamily: "SFProRoundedRegular",
     fontSize: 14,
+  },
+
+  commentInputContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    marginBottom: Platform.OS === "android" ? 8 : 16,
+  },
+  commentInput: {
+    width: "85%",
+    borderColor: "rgba(60,60,67,0.29)",
+    borderWidth: 2,
+    paddingHorizontal: 12,
+    borderRadius: 16,
+    height: 44,
+    fontSize: 17,
+    fontFamily: "SFProRoundedRegular",
+  },
+  messages: {
+    paddingLeft: 4,
   },
 });
