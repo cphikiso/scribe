@@ -18,6 +18,11 @@ export const styles = StyleSheet.create({
     fontFamily: "SFProRoundedHeavy",
     fontSize: 22,
   },
+  bioContainer: {
+    paddingRight: 12,
+    paddingTop: 12,
+    width: "90%",
+  },
   bio: {
     fontFamily: "SFProRoundedMedium",
     fontSize: 16,
