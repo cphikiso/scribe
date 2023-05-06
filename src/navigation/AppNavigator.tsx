@@ -33,6 +33,7 @@ import LoginScreen from "../screens/auth/Login/LoginScreen";
 import EditFullNameScreen from "../screens/profile/EditProfile/EditFullName/EditFullNameScreen";
 import EditUsernameScreen from "../screens/profile/EditProfile/EditUsername/EditUsernameScreen";
 import EditBioScreen from "../screens/profile/EditProfile/EditBio/EditBioScreen";
+import PostDetailedScreen from "../screens/home/PostDetailed/PostDetailedScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -247,6 +248,11 @@ const AppNavigator = () => {
               name="EditProfile"
               options={{ title: "Edit Profile" }}
               component={EditProfileScreen}
+            />
+            <Stack.Screen
+              name="PostDetailed"
+              options={{ title: "Post", headerBackTitleVisible: false }}
+              component={PostDetailedScreen}
             />
           </Stack.Group>
           <Stack.Group

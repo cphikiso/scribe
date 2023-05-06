@@ -1,36 +1,23 @@
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { styles } from "./stylesPostItem";
+import useAuth from "../../../hooks/useAuth";
+import { useRoute, useNavigation } from "@react-navigation/core";
+import { styles } from "./styles";
+import formatTimestamp from "../../../../utils/formatTimestamp";
 import { Audio } from "expo-av";
-import formatTimestamp from "../utils/formatTimestamp";
-import { useNavigation } from "@react-navigation/core";
+import { Ionicons } from "@expo/vector-icons";
 
-interface PostItemProps {
-  post: {
-    index: number;
-    item: {
-      id: number;
-      userName: string;
-      name: string;
-      time: string;
-      body: string;
-      profilePicture: any;
-      audioURI: string;
-      comments: object[];
-      commentCount: number;
-      reposts: number;
-      likes: object[];
-      likeCount: number;
-    };
-  };
-}
-
-const PostItem = ({ post }: PostItemProps) => {
+const PostDetailedScreen = () => {
   const [playing, setPlaying] = useState(false);
+  const { currentUser } = useAuth();
+  const { params } = useRoute();
+  const { post } = params;
 
-  console.log("post is here", post.item.postCreator);
-  const time = formatTimestamp(post.item.data.time);
+  console.log("post details", post);
+  const time = formatTimestamp(post.data.time);
+
+  const navigation = useNavigation();
+
   let sound;
   async function playSound() {
     const { sound: newSound } = await Audio.Sound.createAsync(
@@ -59,37 +46,30 @@ const PostItem = ({ post }: PostItemProps) => {
     }
   }
 
-  const navigation = useNavigation();
-
   return (
-    <TouchableOpacity
-      onPress={() => {
-        navigation.navigate("PostDetailed", { post: post.item });
-      }}
-      activeOpacity={0.9}
-      style={styles.container}
-    >
+    <View style={styles.container}>
       <View style={styles.outerFlexRow}>
         <View style={styles.innerFlexRow}>
           <Image
             source={
-              post.item.postCreator?.profilePicture
-                ? { uri: post.item.postCreator?.profilePicture }
-                : require("../assets/pic.png")
+              post.postCreator?.profilePicture
+                ? { uri: post.postCreator?.profilePicture }
+                : require("../../../../assets/pic.png")
             }
             style={styles.profilePic}
           />
           <View>
             <View style={styles.titleRow}>
               <Text style={styles.name}>
-                {post.item.postCreator.fullName || "NULL"}
+                {post.postCreator.fullName || "NULL"}
               </Text>
-              <Text style={styles.username}>
-                @{post.item.postCreator.username || "NULL"}
-              </Text>
+
               <Text style={styles.timeText}>· {time || "NULL"}</Text>
             </View>
-            <Text style={styles.bodyText}>{post.item.data.body || "NULL"}</Text>
+            <Text style={styles.username}>
+              @{post.postCreator.username || "NULL"}
+            </Text>
+            <Text style={styles.bodyText}>{post.data.body || "NULL"}</Text>
           </View>
         </View>
         {playing ? (
@@ -120,7 +100,7 @@ const PostItem = ({ post }: PostItemProps) => {
             size={24}
           />
           <Text style={styles.actionText}>
-            {post.item.data.commentCount > 0 && post.item.data.commentCount}
+            {post.data.commentCount > 0 && post.data.commentCount}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.icon}>
@@ -130,7 +110,7 @@ const PostItem = ({ post }: PostItemProps) => {
             size={24}
           />
           <Text style={styles.actionText}>
-            {post.item.data.reposts > 0 && post.item.data.reposts}
+            {post.data.reposts > 0 && post.data.reposts}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.icon}>
@@ -140,7 +120,7 @@ const PostItem = ({ post }: PostItemProps) => {
             size={24}
           />
           <Text style={styles.actionText}>
-            {post.item.data.likeCount > 0 && post.item.data.likeCount}
+            {post.data.likeCount > 0 && post.data.likeCount}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.icon}>
@@ -152,8 +132,8 @@ const PostItem = ({ post }: PostItemProps) => {
         </TouchableOpacity>
       </View>
       <View style={{ height: 1, width: "100%", backgroundColor: "#F5F5F5" }} />
-    </TouchableOpacity>
+    </View>
   );
 };
 
-export default PostItem;
+export default PostDetailedScreen;
