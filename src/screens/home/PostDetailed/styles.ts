@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
     color: "#000",
     marginRight: 4,
     fontFamily: "SFProRoundedBold",
-    marginBottom: 4,
+    marginBottom: 2,
     fontSize: 16,
   },
   username: {
@@ -31,6 +31,7 @@ export const styles = StyleSheet.create({
     fontFamily: "SFProRoundedMedium",
     fontSize: 16,
     marginRight: 4,
+    marginBottom: 4,
   },
   dot: {
     height: 2,
@@ -58,6 +59,25 @@ export const styles = StyleSheet.create({
     width: 44,
     justifyContent: "center",
     alignItems: "center",
+  },
+  counterContainer: {
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: "#F5F5F5",
+    paddingVertical: 16,
+    marginTop: 16,
+    flexDirection: "row",
+  },
+  number: {
+    fontFamily: "SFProRoundedBold",
+    fontSize: 16,
+    color: "#000",
+    marginRight: 4,
+  },
+  likeCount: {
+    fontFamily: "SFProRoundedRegular",
+    fontSize: 16,
+    color: "rgba(60,60,67,0.6)",
   },
   iconsRow: {
     flexDirection: "row",

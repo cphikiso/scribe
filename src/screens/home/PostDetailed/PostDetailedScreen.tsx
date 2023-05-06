@@ -21,7 +21,7 @@ const PostDetailedScreen = () => {
   let sound;
   async function playSound() {
     const { sound: newSound } = await Audio.Sound.createAsync(
-      { uri: post.item.data.audioURI },
+      { uri: post.data.audioURI },
       { shouldPlay: true }
     );
     sound = newSound;
@@ -92,6 +92,12 @@ const PostDetailedScreen = () => {
           </TouchableOpacity>
         )}
       </View>
+      {post.data.likesCount > 0 ? (
+        <View style={styles.counterContainer}>
+          <Text style={styles.number}>{post.data.likesCount}</Text>
+          <Text style={styles.likeCount}>Likes</Text>
+        </View>
+      ) : null}
       <View style={styles.iconsRow}>
         <TouchableOpacity style={styles.icon}>
           <Ionicons
