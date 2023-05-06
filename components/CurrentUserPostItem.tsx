@@ -66,7 +66,11 @@ const CurrentUserPostItem = ({ post }: CurrentUserPostItemProps) => {
       <View style={styles.outerFlexRow}>
         <View style={styles.innerFlexRow}>
           <Image
-            source={currentUser.profilePicture || require("../assets/pic.jpg")}
+            source={
+              currentUser?.profilePicture
+                ? { uri: currentUser?.profilePicture }
+                : require("../assets/pic.png")
+            }
             style={styles.profilePic}
           />
           <View>

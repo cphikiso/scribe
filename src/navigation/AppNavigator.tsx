@@ -30,6 +30,9 @@ import SettingsScreen from "../screens/profile/SettingsScreen/SettingsScreen";
 import EditProfileScreen from "../screens/profile/EditProfile/EditProfileScreen";
 import ResetPasswordScreen from "../screens/auth/Login/ResetPassword/ResetPasswordScreen";
 import LoginScreen from "../screens/auth/Login/LoginScreen";
+import EditFullNameScreen from "../screens/profile/EditProfile/EditFullName/EditFullNameScreen";
+import EditUsernameScreen from "../screens/profile/EditProfile/EditUsername/EditUsernameScreen";
+import EditBioScreen from "../screens/profile/EditProfile/EditBio/EditBioScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -194,13 +197,13 @@ const TabNavigator = () => {
                 }}
               >
                 <Image
-                  source={require("../../assets/pic.jpg")}
+                  source={require("../../assets/picBlack.png")}
                   style={{ height: 24, width: 24, borderRadius: 24 }}
                 />
               </View>
             ) : (
               <Image
-                source={require("../../assets/pic.jpg")}
+                source={require("../../assets/pic.png")}
                 style={{ height: 28, width: 28, borderRadius: 24 }}
               />
             ),
@@ -240,7 +243,46 @@ const AppNavigator = () => {
             }}
           >
             <Stack.Screen name="Settings" component={SettingsScreen} />
-            <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+            <Stack.Screen
+              name="EditProfile"
+              options={{ title: "Edit Profile" }}
+              component={EditProfileScreen}
+            />
+          </Stack.Group>
+          <Stack.Group
+            screenOptions={{
+              presentation: "modal",
+              headerShown: true,
+              headerLeft: () => (
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <Text
+                    style={{
+                      fontFamily: "SFProRoundedRegular",
+                      fontSize: 17,
+                      color: colors.purple,
+                    }}
+                  >
+                    Cancel
+                  </Text>
+                </TouchableOpacity>
+              ),
+            }}
+          >
+            <Stack.Screen
+              options={{ title: "Edit Full name" }}
+              name="EditFullName"
+              component={EditFullNameScreen}
+            />
+            <Stack.Screen
+              options={{ title: "Edit username" }}
+              name="EditUsername"
+              component={EditUsernameScreen}
+            />
+            <Stack.Screen
+              options={{ title: "Edit Biography" }}
+              name="EditBio"
+              component={EditBioScreen}
+            />
           </Stack.Group>
           <Stack.Group screenOptions={{ presentation: "transparentModal" }}>
             <Stack.Screen name="CreatePost" component={CreatePostScreen} />

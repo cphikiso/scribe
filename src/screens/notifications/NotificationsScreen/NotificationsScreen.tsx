@@ -26,7 +26,7 @@ const notifications = [
     name: "Michael",
     username: "jordan",
     time: "3m",
-    profilePic: require("../../../../assets/pic.jpg"),
+    profilePic: require("../../../../assets/pic.png"),
     action: "Liked your post",
   },
   {
@@ -34,7 +34,7 @@ const notifications = [
     name: "Michael",
     username: "jordan",
     time: "5m",
-    profilePic: require("../../../../assets/pic.jpg"),
+    profilePic: require("../../../../assets/pic.png"),
     action: "Retweeted your post",
   },
   {
@@ -42,7 +42,7 @@ const notifications = [
     name: "Michael",
     username: "jordan",
     time: "12m",
-    profilePic: require("../../../../assets/pic.jpg"),
+    profilePic: require("../../../../assets/pic.png"),
     action: "Started following you",
   },
   {
@@ -50,7 +50,7 @@ const notifications = [
     name: "Michael",
     username: "jordan",
     time: "23m",
-    profilePic: require("../../../../assets/pic.jpg"),
+    profilePic: require("../../../../assets/pic.png"),
     action: "Liked your post",
   },
   {
@@ -58,7 +58,7 @@ const notifications = [
     name: "Michael",
     username: "jordan",
     time: "2h",
-    profilePic: require("../../../../assets/pic.jpg"),
+    profilePic: require("../../../../assets/pic.png"),
     action: "Commented on your post",
   },
 ];
