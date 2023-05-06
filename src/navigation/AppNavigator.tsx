@@ -197,13 +197,13 @@ const TabNavigator = () => {
                 }}
               >
                 <Image
-                  source={require("../../assets/pic.jpg")}
+                  source={require("../../assets/picBlack.png")}
                   style={{ height: 24, width: 24, borderRadius: 24 }}
                 />
               </View>
             ) : (
               <Image
-                source={require("../../assets/pic.jpg")}
+                source={require("../../assets/pic.png")}
                 style={{ height: 28, width: 28, borderRadius: 24 }}
               />
             ),

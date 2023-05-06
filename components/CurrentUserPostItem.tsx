@@ -69,7 +69,7 @@ const CurrentUserPostItem = ({ post }: CurrentUserPostItemProps) => {
             source={
               currentUser?.profilePicture
                 ? { uri: currentUser?.profilePicture }
-                : require("../assets/pic.jpg")
+                : require("../assets/pic.png")
             }
             style={styles.profilePic}
           />

@@ -66,7 +66,7 @@ const PostItem = ({ post }: PostItemProps) => {
             source={
               post.item.postCreator?.profilePicture
                 ? { uri: post.item.postCreator?.profilePicture }
-                : require("../assets/pic.jpg")
+                : require("../assets/pic.png")
             }
             style={styles.profilePic}
           />

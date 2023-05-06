@@ -42,7 +42,7 @@ const SettingsScreen = ({ navigation }) => {
             source={
               currentUser?.profilePicture
                 ? { uri: currentUser?.profilePicture }
-                : require("../../../../assets/pic.jpg")
+                : require("../../../../assets/pic.png")
             }
             style={{ height: 88, width: 88, borderRadius: 88, marginRight: 16 }}
           />
