@@ -58,7 +58,11 @@ const ProfileScreen = ({ navigation }) => {
           <>
             <View style={styles.listHeader}>
               <Image
-                source={require("../../../../assets/pic.jpg")}
+                source={
+                  currentUser?.profilePicture
+                    ? { uri: currentUser?.profilePicture }
+                    : require("../../../../assets/pic.jpg")
+                }
                 style={styles.profilePic}
               />
               <View style={styles.nameBio}>

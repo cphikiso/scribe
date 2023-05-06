@@ -39,7 +39,11 @@ const SettingsScreen = ({ navigation }) => {
           }}
         >
           <Image
-            source={require("../../../../assets/pic.jpg")}
+            source={
+              currentUser?.profilePicture
+                ? { uri: currentUser?.profilePicture }
+                : require("../../../../assets/pic.jpg")
+            }
             style={{ height: 88, width: 88, borderRadius: 88, marginRight: 16 }}
           />
           <View style={{}}>

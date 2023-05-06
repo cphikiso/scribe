@@ -28,7 +28,7 @@ interface PostItemProps {
 const PostItem = ({ post }: PostItemProps) => {
   const [playing, setPlaying] = useState(false);
 
-  console.log("post is here", post.item.data.time);
+  console.log("post is here", post.item.postCreator);
   const time = formatTimestamp(post.item.data.time);
   let sound;
   async function playSound() {
@@ -64,8 +64,9 @@ const PostItem = ({ post }: PostItemProps) => {
         <View style={styles.innerFlexRow}>
           <Image
             source={
-              post.item.postCreator.profilePicture ||
-              require("../assets/pic.jpg")
+              post.item.postCreator?.profilePicture
+                ? { uri: post.item.postCreator?.profilePicture }
+                : require("../assets/pic.jpg")
             }
             style={styles.profilePic}
           />
