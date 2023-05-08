@@ -1,9 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./stylesPostItem";
 import { Audio } from "expo-av";
 import formatTimestamp from "../utils/formatTimestamp";
+import { useNavigation } from "@react-navigation/core";
+import { getLikeById, updateLike } from "../utils/posts";
+import useAuth from "../src/hooks/useAuth";
+import { collection, doc, getDoc, onSnapshot, query } from "firebase/firestore";
+import { db } from "../firebaseConfig";
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
 interface PostItemProps {
   post: {
@@ -27,8 +33,14 @@ interface PostItemProps {
 
 const PostItem = ({ post }: PostItemProps) => {
   const [playing, setPlaying] = useState(false);
+  const [currentLikeState, setCurrentLikeState] = useState({
+    state: false,
+    counter: post.item.data.likeCount,
+  });
+  const [likeCount, setLikeCount] = useState(0);
+  const [commentCount, setCommentCount] = useState(0);
 
-  console.log("post is here", post.item.postCreator);
+  const { currentUser } = useAuth();
   const time = formatTimestamp(post.item.data.time);
   let sound;
   async function playSound() {
@@ -58,8 +70,108 @@ const PostItem = ({ post }: PostItemProps) => {
     }
   }
 
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    getLikeById(
+      post.item.data.postId,
+      currentUser.uid,
+      post.item.postCreator.uid
+    ).then((res) => {
+      setCurrentLikeState({
+        ...currentLikeState,
+        state: res,
+      });
+    });
+
+    const focusSubscription = navigation.addListener("focus", () => {
+      getLikeById(
+        post.item.data.postId,
+        currentUser.uid,
+        post.item.postCreator.uid
+      ).then((res) => {
+        setCurrentLikeState({
+          ...currentLikeState,
+          state: res,
+        });
+      });
+    });
+
+    return focusSubscription;
+  }, []);
+
+  /**
+   * Handles the like button action.
+   *
+   * In order to make the action more snappy the like action
+   * is optimistic, meaning we don't wait for a response from the
+   * server and always assume the write/delete action is successful
+   */
+  const handleUpdateLike = useMemo(
+    () => (currentLikeStateInst) => {
+      setCurrentLikeState({
+        state: !currentLikeStateInst.state,
+        counter:
+          currentLikeStateInst.counter + (currentLikeStateInst.state ? -1 : 1),
+      });
+      updateLike(
+        post.item.data.postId,
+        currentUser.uid,
+        post.item.postCreator.uid,
+        currentLikeState
+      );
+    },
+    [currentLikeState]
+  );
+
+  useEffect(() => {
+    // Reference to the post document
+    new Promise(async (resolve, reject) => {
+      const ref = doc(
+        db,
+        "posts",
+        post.item.postCreator.uid,
+        "userPosts",
+        post.item.data.postId
+      );
+      const docRef = await getDoc(ref);
+      // Subscribe to the post document for updates
+
+      if (docRef.exists()) {
+        console.log("Document data:", docRef.data());
+        setLikeCount(docRef.data().likeCount || 0);
+        setCommentCount(docRef.data().commentCount || 0);
+        // setLikeCount(doc.data().likeCount || 0);
+        // setCommentCount(doc.data().commentCount || 0);}}
+      } else {
+        resolve(console.log("No such document!"));
+      }
+
+      // return () => {
+      //   unsub();
+      // };
+    });
+    // const unsubscribe = postRef.onSnapshot((doc) => {
+    //   if (doc.exists) {
+    //     setLikeCount(doc.data().likeCount || 0);
+    //     setCommentCount(doc.data().commentCount || 0);
+    //   }
+    // });
+
+    // Unsubscribe from the listener when the component unmounts
+    // return () => {
+    //   unsub();
+    // };
+  }, [post.item.data.postId, post.item.postCreator.uid]);
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      onPress={() => {
+        navigation.navigate("PostDetailed", { post: post.item });
+      }}
+      activeOpacity={0.9}
+      style={styles.container}
+    >
       <View style={styles.outerFlexRow}>
         <View style={styles.innerFlexRow}>
           <Image
@@ -124,10 +236,15 @@ const PostItem = ({ post }: PostItemProps) => {
             {post.item.data.reposts > 0 && post.item.data.reposts}
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.icon}>
+        <TouchableOpacity
+          onPress={() => {
+            handleUpdateLike(currentLikeState);
+          }}
+          style={styles.icon}
+        >
           <Ionicons
-            name="ios-heart-outline" //ios-heart-sharp is filled
-            color={"rgba(60,60,67,0.6)"}
+            name={currentLikeState.state ? "ios-heart" : "ios-heart-outline"} //ios-heart is filled
+            color={currentLikeState.state ? "red" : "rgba(60,60,67,0.6)"}
             size={24}
           />
           <Text style={styles.actionText}>
@@ -143,7 +260,7 @@ const PostItem = ({ post }: PostItemProps) => {
         </TouchableOpacity>
       </View>
       <View style={{ height: 1, width: "100%", backgroundColor: "#F5F5F5" }} />
-    </View>
+    </TouchableOpacity>
   );
 };
 

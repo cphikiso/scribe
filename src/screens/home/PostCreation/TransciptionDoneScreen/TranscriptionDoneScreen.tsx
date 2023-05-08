@@ -23,6 +23,7 @@ const TranscriptionDoneScreen = ({ navigation }) => {
   const [transcribing, setTranscribing] = useState(true);
   const [listening, setListening] = useState(false);
   const [transcribedText, setTranscribedText] = useState("");
+  const [postId, setPostId] = useState("");
 
   const { audioURI, audioDuration } = useRoute().params;
   const { currentUser } = useAuth();
@@ -43,10 +44,11 @@ const TranscriptionDoneScreen = ({ navigation }) => {
       if (response.status == 200) {
         const data = await response.json();
 
-        if (data.text) {
+        if (data?.text) {
           setTranscribedText(data.text);
           setTranscribing(false);
         } else {
+          Alert.alert("Error transcribing audio.");
           console.error("Error: data or data.text is undefined.");
         }
       }
@@ -82,7 +84,7 @@ const TranscriptionDoneScreen = ({ navigation }) => {
   }
 
   function uploadPost() {
-    setDoc(doc(db, "posts", currentUser.uid, "userPosts", `${uuid.v4()}`), {
+    setDoc(doc(db, "posts", currentUser.uid, "userPosts", postId), {
       body: transcribedText,
       uid: currentUser.uid,
       time: serverTimestamp(),
@@ -92,6 +94,7 @@ const TranscriptionDoneScreen = ({ navigation }) => {
       audioDuration: audioDuration,
       likeCount: 0,
       commentCount: 0,
+      postId,
     })
       .then(() => {
         navigation.navigate("Home");
@@ -104,6 +107,7 @@ const TranscriptionDoneScreen = ({ navigation }) => {
 
   useEffect(() => {
     callWhisper(audioURI);
+    setPostId(`${uuid.v4()}`);
   }, []);
 
   return (
