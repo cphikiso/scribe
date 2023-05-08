@@ -11,7 +11,7 @@ import {
   Platform,
   Keyboard,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import { useRoute, useNavigation } from "@react-navigation/core";
 import { styles } from "./styles";
@@ -19,8 +19,16 @@ import formatTimestamp from "../../../../utils/formatTimestamp";
 import { Audio } from "expo-av";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../../../components/colors";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  query,
+  serverTimestamp,
+  orderBy,
+} from "firebase/firestore";
 import { db } from "../../../../firebaseConfig";
+import uuid from "react-native-uuid";
 
 const PostDetailedScreen = () => {
   const [input, setInput] = useState("");
@@ -64,21 +72,58 @@ const PostDetailedScreen = () => {
     }
   }
 
-  const sendComment = () => {
-    addDoc(collection(db, "posts"), {
-      timestamp: serverTimestamp(),
-      uid: currentUser.uid,
-      comment: input,
-    });
-
-    setInput("");
-  };
-
   function dismissKeyboard() {
     if (Platform.OS != "web") {
       Keyboard.dismiss();
     }
   }
+
+  useEffect(
+    () =>
+      onSnapshot(
+        query(
+          collection(
+            db,
+            "posts",
+            post.postCreator.uid,
+            "userPosts",
+            post.data.postId,
+            "comments"
+          ),
+          orderBy("timestamp", "desc")
+        ),
+        (snapshot) => {
+          setComments(snapshot.docs.map((doc) => doc.data()));
+        }
+      ),
+    [db, post]
+  );
+
+  const sendComment = () => {
+    const commentId = `${uuid.v4()}`;
+    addDoc(
+      collection(
+        db,
+        "posts",
+        post.postCreator.uid,
+        "userPosts",
+        post.data.postId,
+        "comments"
+      ),
+      {
+        timestamp: serverTimestamp(),
+        uid: currentUser?.uid,
+        comment: input,
+        likeCount: 0,
+        likes: [],
+        replyCount: 0,
+        replies: [],
+        responseTo: post.data.postId,
+        userRespondingTo: post.postCreator.uid,
+      }
+    );
+    setInput("");
+  };
 
   return (
     <View style={styles.container}>
