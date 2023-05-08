@@ -247,7 +247,9 @@ const PostItem = ({ post }: PostItemProps) => {
             color={currentLikeState.state ? "red" : "rgba(60,60,67,0.6)"}
             size={24}
           />
-          <Text style={styles.actionText}>{likeCount > 0 && likeCount}</Text>
+          <Text style={styles.actionText}>
+            {post.item.data.likeCount > 0 && post.item.data.likeCount}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.icon}>
           <Ionicons

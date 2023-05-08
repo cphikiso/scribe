@@ -11,7 +11,7 @@ import {
   Platform,
   Keyboard,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import { useRoute, useNavigation } from "@react-navigation/core";
 import { styles } from "./styles";
@@ -32,6 +32,7 @@ import {
 import { db } from "../../../../firebaseConfig";
 import uuid from "react-native-uuid";
 import CommentComponent from "./CommentComponent";
+import { getLikeById, updateLike } from "../../../../utils/posts";
 
 const PostDetailedScreen = () => {
   const [input, setInput] = useState("");
@@ -41,6 +42,13 @@ const PostDetailedScreen = () => {
   const { currentUser } = useAuth();
   const { params } = useRoute();
   const { post } = params;
+
+  const [currentLikeState, setCurrentLikeState] = useState({
+    state: false,
+    counter: post.data.likeCount,
+  });
+  const [likeCount, setLikeCount] = useState(post.data.likeCount);
+  const [commentCount, setCommentCount] = useState(post.data.commentCount);
 
   console.log("post details", post);
   const time = formatTimestamp(post.data.time);
@@ -80,6 +88,54 @@ const PostDetailedScreen = () => {
       Keyboard.dismiss();
     }
   }
+
+  useEffect(() => {
+    getLikeById(post.data.postId, currentUser.uid, post.postCreator.uid).then(
+      (res) => {
+        setCurrentLikeState({
+          ...currentLikeState,
+          state: res,
+        });
+      }
+    );
+
+    const focusSubscription = navigation.addListener("focus", () => {
+      getLikeById(post.data.postId, currentUser.uid, post.postCreator.uid).then(
+        (res) => {
+          setCurrentLikeState({
+            ...currentLikeState,
+            state: res,
+          });
+        }
+      );
+    });
+
+    return focusSubscription;
+  }, []);
+
+  /**
+   * Handles the like button action.
+   *
+   * In order to make the action more snappy the like action
+   * is optimistic, meaning we don't wait for a response from the
+   * server and always assume the write/delete action is successful
+   */
+  const handleUpdateLike = useMemo(
+    () => (currentLikeStateInst) => {
+      setCurrentLikeState({
+        state: !currentLikeStateInst.state,
+        counter:
+          currentLikeStateInst.counter + (currentLikeStateInst.state ? -1 : 1),
+      });
+      updateLike(
+        post.data.postId,
+        currentUser.uid,
+        post.postCreator.uid,
+        currentLikeState
+      );
+    },
+    [currentLikeState]
+  );
 
   useEffect(
     () =>
@@ -223,10 +279,21 @@ const PostDetailedScreen = () => {
                       {post.data.reposts > 0 && post.data.reposts}
                     </Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.icon}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      handleUpdateLike(currentLikeState);
+                    }}
+                    style={styles.icon}
+                  >
                     <Ionicons
-                      name="ios-heart-outline" //ios-heart-sharp is filled
-                      color={"rgba(60,60,67,0.6)"}
+                      name={
+                        currentLikeState.state
+                          ? "ios-heart"
+                          : "ios-heart-outline"
+                      } //ios-heart-sharp is filled
+                      color={
+                        currentLikeState.state ? "red" : "rgba(60,60,67,0.6)"
+                      }
                       size={24}
                     />
                     <Text style={styles.actionText}>
