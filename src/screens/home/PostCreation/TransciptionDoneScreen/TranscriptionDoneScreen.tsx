@@ -44,10 +44,11 @@ const TranscriptionDoneScreen = ({ navigation }) => {
       if (response.status == 200) {
         const data = await response.json();
 
-        if (data.text) {
+        if (data?.text) {
           setTranscribedText(data.text);
           setTranscribing(false);
         } else {
+          Alert.alert("Error transcribing audio.");
           console.error("Error: data or data.text is undefined.");
         }
       }
