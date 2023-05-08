@@ -1,10 +1,11 @@
 type Timestamp = {
   _nanoseconds: number;
   _seconds: number;
+  seconds: number;
 };
 
 export default function formatTimestamp(timestamp: Timestamp): string {
-  const seconds = timestamp._seconds;
+  const seconds = timestamp._seconds || timestamp.seconds;
   const date = new Date(seconds * 1000);
   const now = new Date();
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);

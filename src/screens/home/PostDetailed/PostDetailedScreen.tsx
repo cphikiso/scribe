@@ -26,9 +26,12 @@ import {
   query,
   serverTimestamp,
   orderBy,
+  getDoc,
+  doc,
 } from "firebase/firestore";
 import { db } from "../../../../firebaseConfig";
 import uuid from "react-native-uuid";
+import CommentComponent from "./CommentComponent";
 
 const PostDetailedScreen = () => {
   const [input, setInput] = useState("");
@@ -41,7 +44,7 @@ const PostDetailedScreen = () => {
 
   console.log("post details", post);
   const time = formatTimestamp(post.data.time);
-
+  console.log("post OG TIME", post.data.time, "post time", time);
   const navigation = useNavigation();
 
   let sound;
@@ -90,7 +93,7 @@ const PostDetailedScreen = () => {
             post.data.postId,
             "comments"
           ),
-          orderBy("timestamp", "desc")
+          orderBy("timestamp", "asc")
         ),
         (snapshot) => {
           setComments(snapshot.docs.map((doc) => doc.data()));
@@ -125,6 +128,9 @@ const PostDetailedScreen = () => {
     setInput("");
   };
 
+  let commentCreator: string;
+
+  console.log("comments ARRAY", comments);
   return (
     <View style={styles.container}>
       <KeyboardAvoidingView
@@ -244,103 +250,8 @@ const PostDetailedScreen = () => {
                 />
               </View>
             )}
-            data={commentsArr}
-            renderItem={(comment) => (
-              console.log("comment", comment),
-              (
-                <View style={styles.commentContainer}>
-                  <View style={styles.outerFlexRow}>
-                    <View style={styles.innerFlexRow}>
-                      <Image
-                        source={
-                          comment.item.commentCreator?.profilePicture
-                            ? {
-                                uri: comment.item.commentCreator
-                                  ?.profilePicture,
-                              }
-                            : require("../../../../assets/pic.png")
-                        }
-                        style={styles.profilePic}
-                      />
-                      <View>
-                        <View style={styles.titleRow}>
-                          <Text style={styles.name}>
-                            {comment.item.commentCreator.fullName || "NULL"}
-                          </Text>
-
-                          <Text style={styles.timeText}>
-                            · {time || "NULL"}
-                          </Text>
-                        </View>
-                        <Text style={styles.username}>
-                          @{comment.item.commentCreator.username || "NULL"}
-                        </Text>
-                        <Text style={styles.bodyText}>
-                          {comment.item.data.body || "NULL"}
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                  {comment.item.data.likesCount > 0 ? (
-                    <View style={styles.counterContainer}>
-                      <Text style={styles.number}>
-                        {comment.item.data.likesCount}
-                      </Text>
-                      <Text style={styles.likeCount}>Likes</Text>
-                    </View>
-                  ) : null}
-                  <View style={styles.iconsRow}>
-                    <TouchableOpacity style={styles.icon}>
-                      <Ionicons
-                        name="ios-chatbox-outline"
-                        color={"rgba(60,60,67,0.6)"}
-                        size={24}
-                      />
-                      <Text style={styles.actionText}>
-                        {comment.item.data.commentCount > 0 &&
-                          comment.item.data.commentCount}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.icon}>
-                      <Ionicons
-                        name="ios-sync-outline"
-                        color={"rgba(60,60,67,0.6)"}
-                        size={24}
-                      />
-                      <Text style={styles.actionText}>
-                        {comment.item.data.recomments > 0 &&
-                          comment.item.data.recomments}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.icon}>
-                      <Ionicons
-                        name="ios-heart-outline" //ios-heart-sharp is filled
-                        color={"rgba(60,60,67,0.6)"}
-                        size={24}
-                      />
-                      <Text style={styles.actionText}>
-                        {comment.item.data.likeCount > 0 &&
-                          comment.item.data.likeCount}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.icon}>
-                      <Ionicons
-                        name="ios-ellipsis-horizontal"
-                        color={"rgba(60,60,67,0.3)"}
-                        size={24}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                  <View
-                    style={{
-                      height: 1,
-                      width: "100%",
-                      backgroundColor: "#F5F5F5",
-                    }}
-                  />
-                </View>
-              )
-            )}
+            data={comments}
+            renderItem={(comment) => <CommentComponent comment={comment} />}
             showsVerticalScrollIndicator={false}
           />
         </TouchableWithoutFeedback>
@@ -362,62 +273,3 @@ const PostDetailedScreen = () => {
 };
 
 export default PostDetailedScreen;
-
-const commentsArr = [
-  {
-    data: {
-      body: "cant let this one slide",
-      timestamp: { _nanoseconds: 110000000, _seconds: 1683111635 },
-    },
-    commentCreator: { fullName: "Drake", username: "drizzy" },
-  },
-  {
-    data: {
-      body: "cant let this one slide",
-      timestamp: { _nanoseconds: 110000000, _seconds: 1683111635 },
-    },
-    commentCreator: { fullName: "Drake", username: "drizzy" },
-  },
-  {
-    data: {
-      body: "cant let this one slide",
-      timestamp: { _nanoseconds: 110000000, _seconds: 1683111635 },
-    },
-    commentCreator: { fullName: "Drake", username: "drizzy" },
-  },
-  {
-    data: {
-      body: "cant let this one slide",
-      timestamp: { _nanoseconds: 110000000, _seconds: 1683111635 },
-    },
-    commentCreator: { fullName: "Drake", username: "drizzy" },
-  },
-  {
-    data: {
-      body: "cant let this one slide",
-      timestamp: { _nanoseconds: 110000000, _seconds: 1683111635 },
-    },
-    commentCreator: { fullName: "Drake", username: "drizzy" },
-  },
-  {
-    data: {
-      body: "cant let this one slide",
-      timestamp: { _nanoseconds: 110000000, _seconds: 1683111635 },
-    },
-    commentCreator: { fullName: "Drake", username: "drizzy" },
-  },
-  {
-    data: {
-      body: "cant let this one slide",
-      timestamp: { _nanoseconds: 110000000, _seconds: 1683111635 },
-    },
-    commentCreator: { fullName: "Drake", username: "drizzy" },
-  },
-  {
-    data: {
-      body: "cant let this one slide",
-      timestamp: { _nanoseconds: 110000000, _seconds: 1683111635 },
-    },
-    commentCreator: { fullName: "Drake", username: "drizzy" },
-  },
-];
