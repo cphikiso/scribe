@@ -9,7 +9,11 @@ import formatTimestamp from "../../../../utils/formatTimestamp";
 const CommentComponent = ({ comment }) => {
   const [commentCreator, setCommentCreator] = useState(null);
 
-  const time = formatTimestamp(comment.item.timestamp);
+  const time =
+    comment.item.timestamp === null
+      ? "Just now"
+      : formatTimestamp(comment.item.timestamp);
+
   console.log("time", comment.item.timestamp, "converted time tooo", time);
 
   useEffect(() => {
@@ -47,7 +51,9 @@ const CommentComponent = ({ comment }) => {
                 {commentCreator?.fullName || "NULL"}
               </Text>
 
-              <Text style={styles.timeText}>· {time || "NULL"}</Text>
+              <Text style={styles.timeText}>
+                · {time == "-1" ? "Just now" : time || "null"}
+              </Text>
             </View>
             <Text style={styles.username}>
               @{commentCreator?.username || "NULL"}
