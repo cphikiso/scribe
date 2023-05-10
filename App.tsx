@@ -8,6 +8,7 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { NavigationContainer } from "@react-navigation/native";
 import { AuthProvider } from "./src/hooks/useAuth";
+import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -30,11 +31,13 @@ export default function App() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <AuthProvider>
-        <NavigationContainer onReady={onLayoutRootView}>
-          <AppNavigator />
-        </NavigationContainer>
-      </AuthProvider>
+      <ActionSheetProvider>
+        <AuthProvider>
+          <NavigationContainer onReady={onLayoutRootView}>
+            <AppNavigator />
+          </NavigationContainer>
+        </AuthProvider>
+      </ActionSheetProvider>
     </GestureHandlerRootView>
   );
 }

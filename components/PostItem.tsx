@@ -1,5 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./stylesPostItem";
 import { Audio } from "expo-av";
@@ -7,9 +14,19 @@ import formatTimestamp from "../utils/formatTimestamp";
 import { useNavigation } from "@react-navigation/core";
 import { getLikeById, updateLike } from "../utils/posts";
 import useAuth from "../src/hooks/useAuth";
-import { collection, doc, getDoc, onSnapshot, query } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  onSnapshot,
+  query,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+import { useActionSheet } from "@expo/react-native-action-sheet";
 
 interface PostItemProps {
   post: {
@@ -164,6 +181,66 @@ const PostItem = ({ post }: PostItemProps) => {
     // };
   }, [post.item.data.postId, post.item.postCreator.uid]);
 
+  const { showActionSheetWithOptions } = useActionSheet();
+
+  const onPressCurrentUserEllipsis = () => {
+    const options = ["Delete", "Cancel"];
+    const destructiveButtonIndex = 0;
+    const cancelButtonIndex = 1;
+
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        destructiveButtonIndex,
+      },
+      (buttonIndex) => {
+        if (buttonIndex === destructiveButtonIndex) {
+          console.log("Delete");
+          deleteDoc(
+            doc(
+              db,
+              "posts",
+              post.item.postCreator.uid,
+              "userPosts",
+              post.item.data.postId
+            )
+          ).then(() => {
+            Alert.alert("Post deleted");
+          });
+        } else if (buttonIndex === cancelButtonIndex) {
+          console.log("Cancel");
+        }
+      }
+    );
+  };
+  const onPressGeneralUserEllipsis = () => {
+    const options = ["Report", "Cancel"];
+    const destructiveButtonIndex = 0;
+    const cancelButtonIndex = 1;
+
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        destructiveButtonIndex,
+      },
+      (buttonIndex) => {
+        if (buttonIndex === destructiveButtonIndex) {
+          console.log("Report");
+          setDoc(doc(db, "reports", post.item.data.postId), {
+            postData: post.item.data,
+            postCreator: post.item.postCreator,
+            reporter: currentUser,
+            timestamp: serverTimestamp(),
+          });
+        } else if (buttonIndex === cancelButtonIndex) {
+          console.log("Cancel");
+        }
+      }
+    );
+  };
+
   return (
     <TouchableOpacity
       onPress={() => {
@@ -251,7 +328,14 @@ const PostItem = ({ post }: PostItemProps) => {
             {post.item.data.likeCount > 0 && post.item.data.likeCount}
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.icon}>
+        <TouchableOpacity
+          onPress={
+            post.item.postCreator?.uid === currentUser?.uid
+              ? onPressCurrentUserEllipsis
+              : onPressGeneralUserEllipsis
+          }
+          style={styles.icon}
+        >
           <Ionicons
             name="ios-ellipsis-horizontal"
             color={"rgba(60,60,67,0.3)"}
