@@ -10,6 +10,7 @@ import {
   TouchableWithoutFeedback,
   Platform,
   Keyboard,
+  Alert,
 } from "react-native";
 import React, { useEffect, useMemo, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
@@ -28,11 +29,14 @@ import {
   orderBy,
   getDoc,
   doc,
+  setDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../../../../firebaseConfig";
 import uuid from "react-native-uuid";
 import CommentComponent from "./CommentComponent";
 import { getLikeById, updateLike } from "../../../../utils/posts";
+import { useActionSheet } from "@expo/react-native-action-sheet";
 
 const PostDetailedScreen = () => {
   const [input, setInput] = useState("");
@@ -184,9 +188,66 @@ const PostDetailedScreen = () => {
     setInput("");
   };
 
-  let commentCreator: string;
+  const { showActionSheetWithOptions } = useActionSheet();
 
-  console.log("comments ARRAY", comments);
+  const onPressCurrentUserEllipsis = () => {
+    const options = ["Delete", "Cancel"];
+    const destructiveButtonIndex = 0;
+    const cancelButtonIndex = 1;
+
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        destructiveButtonIndex,
+      },
+      (buttonIndex) => {
+        if (buttonIndex === destructiveButtonIndex) {
+          console.log("Delete");
+          deleteDoc(
+            doc(
+              db,
+              "posts",
+              post.item.postCreator.uid,
+              "userPosts",
+              post.item.data.postId
+            )
+          ).then(() => {
+            Alert.alert("Post deleted");
+          });
+        } else if (buttonIndex === cancelButtonIndex) {
+          console.log("Cancel");
+        }
+      }
+    );
+  };
+  const onPressGeneralUserEllipsis = () => {
+    const options = ["Report", "Cancel"];
+    const destructiveButtonIndex = 0;
+    const cancelButtonIndex = 1;
+
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        destructiveButtonIndex,
+      },
+      (buttonIndex) => {
+        if (buttonIndex === destructiveButtonIndex) {
+          console.log("Report");
+          setDoc(doc(db, "reports", post.item.data.postId), {
+            postData: post.item.data,
+            postCreator: post.item.postCreator,
+            reporter: currentUser,
+            timestamp: serverTimestamp(),
+          });
+        } else if (buttonIndex === cancelButtonIndex) {
+          console.log("Cancel");
+        }
+      }
+    );
+  };
+
   return (
     <View style={styles.container}>
       <KeyboardAvoidingView
@@ -300,7 +361,14 @@ const PostDetailedScreen = () => {
                       {post.data.likeCount > 0 && post.data.likeCount}
                     </Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.icon}>
+                  <TouchableOpacity
+                    onPress={
+                      currentUser.uid === post.data.uid
+                        ? onPressCurrentUserEllipsis
+                        : onPressGeneralUserEllipsis
+                    }
+                    style={styles.icon}
+                  >
                     <Ionicons
                       name="ios-ellipsis-horizontal"
                       color={"rgba(60,60,67,0.3)"}

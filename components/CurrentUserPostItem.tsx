@@ -1,10 +1,20 @@
 import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./stylesPostItem";
 import { Audio } from "expo-av";
 import formatTimestamp from "../utils/formatTimestamp";
 import useAuth from "../src/hooks/useAuth";
+import { deleteDoc, doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { db } from "../firebaseConfig";
+import { useActionSheet } from "@expo/react-native-action-sheet";
 
 interface CurrentUserPostItemProps {
   post: {
@@ -60,6 +70,67 @@ const CurrentUserPostItem = ({ post }: CurrentUserPostItemProps) => {
       null;
     }
   }
+
+  const { showActionSheetWithOptions } = useActionSheet();
+
+  const onPressCurrentUserEllipsis = () => {
+    const options = ["Delete", "Cancel"];
+    const destructiveButtonIndex = 0;
+    const cancelButtonIndex = 1;
+
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        destructiveButtonIndex,
+      },
+      (buttonIndex) => {
+        if (buttonIndex === destructiveButtonIndex) {
+          console.log("Delete");
+          deleteDoc(
+            doc(
+              db,
+              "posts",
+              post.item.data.uid,
+              "userPosts",
+              post.item.data.postId
+            )
+          ).then(() => {
+            Alert.alert("Post deleted");
+          });
+        } else if (buttonIndex === cancelButtonIndex) {
+          console.log("Cancel");
+        }
+      }
+    );
+  };
+
+  const onPressGeneralUserEllipsis = () => {
+    const options = ["Report", "Cancel"];
+    const destructiveButtonIndex = 0;
+    const cancelButtonIndex = 1;
+
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        destructiveButtonIndex,
+      },
+      (buttonIndex) => {
+        if (buttonIndex === destructiveButtonIndex) {
+          console.log("Report");
+          setDoc(doc(db, "reports", post.item.data.postId), {
+            postData: post.item.data,
+            postCreator: post.item.data.uid,
+            reporter: currentUser,
+            timestamp: serverTimestamp(),
+          });
+        } else if (buttonIndex === cancelButtonIndex) {
+          console.log("Cancel");
+        }
+      }
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -137,6 +208,11 @@ const CurrentUserPostItem = ({ post }: CurrentUserPostItemProps) => {
         </TouchableOpacity>
         <TouchableOpacity style={styles.icon}>
           <Ionicons
+            onPress={
+              currentUser.uid === post.item.data.uid
+                ? onPressCurrentUserEllipsis
+                : onPressGeneralUserEllipsis
+            }
             name="ios-ellipsis-horizontal"
             color={"rgba(60,60,67,0.3)"}
             size={24}
