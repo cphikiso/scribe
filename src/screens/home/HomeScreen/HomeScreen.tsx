@@ -40,7 +40,6 @@ const HomeScreen = () => {
         } else {
           setPosts(res.data.data);
         }
-        console.log("All user posts:", res.data.data);
       });
     } catch (error) {
       console.error("Error fetching posts:", error);

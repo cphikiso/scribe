@@ -155,7 +155,6 @@ const PostItem = ({ post }: PostItemProps) => {
       // Subscribe to the post document for updates
 
       if (docRef.exists()) {
-        console.log("Document data:", docRef.data());
         setLikeCount(docRef.data().likeCount || 0);
         setCommentCount(docRef.data().commentCount || 0);
         // setLikeCount(doc.data().likeCount || 0);
@@ -196,7 +195,6 @@ const PostItem = ({ post }: PostItemProps) => {
       },
       (buttonIndex) => {
         if (buttonIndex === destructiveButtonIndex) {
-          console.log("Delete");
           deleteDoc(
             doc(
               db,
@@ -227,7 +225,6 @@ const PostItem = ({ post }: PostItemProps) => {
       },
       (buttonIndex) => {
         if (buttonIndex === destructiveButtonIndex) {
-          console.log("Report");
           setDoc(doc(db, "reports", post.item.data.postId), {
             postData: post.item.data,
             postCreator: post.item.postCreator,
