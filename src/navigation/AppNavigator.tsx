@@ -198,13 +198,21 @@ const TabNavigator = () => {
                 }}
               >
                 <Image
-                  source={require("../../assets/picBlack.png")}
+                  source={
+                    currentUser?.profilePicture
+                      ? { uri: currentUser?.profilePicture }
+                      : require("../../assets/picBlack.png")
+                  }
                   style={{ height: 24, width: 24, borderRadius: 24 }}
                 />
               </View>
             ) : (
               <Image
-                source={require("../../assets/pic.png")}
+                source={
+                  currentUser?.profilePicture
+                    ? { uri: currentUser?.profilePicture }
+                    : require("../../assets/pic.png")
+                }
                 style={{ height: 28, width: 28, borderRadius: 24 }}
               />
             ),
@@ -384,7 +392,7 @@ const AppNavigator = () => {
 
             <Stack.Screen
               options={{
-                title: "next, create your @ name.",
+                title: "next, create your username.",
               }}
               name="EnterUsername"
               component={EnterUsernameScreen}

@@ -45,6 +45,12 @@
         {
           "contactsPermission": "Scribe accesses your contacts to let you invite friends from university."
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app needs access to your photos to let you upload a profile picture."
+        }
       ]
     ],
     "extra": {
