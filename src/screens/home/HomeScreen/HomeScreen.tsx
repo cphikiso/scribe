@@ -21,10 +21,13 @@ import { styles } from "./styles";
 import PostItem from "../../../../components/PostItem";
 import useAuth from "../../../hooks/useAuth";
 import { getFunctions, httpsCallable } from "firebase/functions";
+import { collection, doc, onSnapshot, query } from "firebase/firestore";
+import { db } from "../../../../firebaseConfig";
 const HomeScreen = () => {
   const { user, currentUser } = useAuth();
   const [posts, setPosts] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [newPosts, setNewPosts] = useState([]);
 
   async function fetchAllPostsSortedByTime(afterTimestamp = null) {
     const functions = getFunctions();
@@ -66,9 +69,24 @@ const HomeScreen = () => {
     fetchAllPostsSortedByTime();
   }, []);
 
+  useEffect(() => {
+    const postsCollection = query(collection(db, "posts"));
+    const unsubscribe = onSnapshot(postsCollection, (querySnapshot) => {
+      console.log("querysnapshot", querySnapshot.docs);
+      const newPosts = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setNewPosts(newPosts);
+    });
+
+    return () => unsubscribe();
+  }, [db]);
+
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
+      {newPosts.length > 0 && <Text>new posts</Text>}
       <FlatList
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
