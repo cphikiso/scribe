@@ -99,6 +99,9 @@ const TranscriptionDoneScreen = ({ navigation }) => {
       .then(() => {
         navigation.navigate("Home");
       })
+      .then(() => {
+        Alert.alert("Post uploaded successfully!");
+      })
       .catch((error) => {
         Alert.alert(error.message);
         console.warn(error);
