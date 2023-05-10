@@ -251,16 +251,23 @@ const PostItem = ({ post }: PostItemProps) => {
     >
       <View style={styles.outerFlexRow}>
         <View style={styles.innerFlexRow}>
-          <Image
-            source={
-              post.item.postCreator?.profilePicture
-                ? { uri: post.item.postCreator?.profilePicture }
-                : require("../assets/pic.png")
-            }
-            style={styles.profilePic}
-          />
+          <TouchableOpacity>
+            <Image
+              source={
+                post.item.postCreator?.profilePicture
+                  ? { uri: post.item.postCreator?.profilePicture }
+                  : require("../assets/pic.png")
+              }
+              style={styles.profilePic}
+            />
+          </TouchableOpacity>
           <View>
-            <View style={styles.titleRow}>
+            <TouchableOpacity
+              onPress={() => {
+                console.log("go to USER PROFILE");
+              }}
+              style={styles.titleRow}
+            >
               <Text style={styles.name}>
                 {post.item.postCreator.fullName || "NULL"}
               </Text>
@@ -268,7 +275,7 @@ const PostItem = ({ post }: PostItemProps) => {
                 @{post.item.postCreator.username || "NULL"}
               </Text>
               <Text style={styles.timeText}>· {time || "NULL"}</Text>
-            </View>
+            </TouchableOpacity>
             <Text style={styles.bodyText}>{post.item.data.body || "NULL"}</Text>
           </View>
         </View>
@@ -293,7 +300,12 @@ const PostItem = ({ post }: PostItemProps) => {
         )}
       </View>
       <View style={styles.iconsRow}>
-        <TouchableOpacity style={styles.icon}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("PostDetailed", { post: post.item });
+          }}
+          style={styles.icon}
+        >
           <Ionicons
             name="ios-chatbox-outline"
             color={"rgba(60,60,67,0.6)"}
