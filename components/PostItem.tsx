@@ -251,7 +251,14 @@ const PostItem = ({ post }: PostItemProps) => {
     >
       <View style={styles.outerFlexRow}>
         <View style={styles.innerFlexRow}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("OtherUserProfile", {
+                profileOwner: post.item.postCreator,
+              });
+              console.log("go to USER PROFILE");
+            }}
+          >
             <Image
               source={
                 post.item.postCreator?.profilePicture
@@ -264,6 +271,9 @@ const PostItem = ({ post }: PostItemProps) => {
           <View>
             <TouchableOpacity
               onPress={() => {
+                navigation.navigate("OtherUserProfile", {
+                  profileOwner: post.item.postCreator,
+                });
                 console.log("go to USER PROFILE");
               }}
               style={styles.titleRow}
